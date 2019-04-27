@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-	Control ambiental
+	N'gine para Arduino
 	Ver 0.0.1-a
 	
 	Proyecto iniciado el 05-04-2019
@@ -9,6 +9,10 @@
 	
 	http://www.nightfoxandco.com
 	contact@nightfoxandco.com
+
+	N'gine para Arduino se distribuye bajo la licencia CREATIVE COMMONS
+	"Attribution-NonCommercial 4.0 International"
+	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Control del display LCD
 
@@ -17,28 +21,29 @@
 
 
 /*** Includes ***/
-// Includes del proyecto
-#include "lcd.h"
+// Includes de N'gine
+#include "ngn_lcd.h"
 
 
 
 /*** Constructor ***/
-Lcd::Lcd() {	
+NGN_Lcd::NGN_Lcd() {	
 }
 
 
 
 /*** Destructor ***/
-Lcd::~Lcd() {
+NGN_Lcd::~NGN_Lcd() {
 }
 
 
 
 /*** Configura el display ***/
-void Lcd::Start() {
+void NGN_Lcd::Start() {
 	
 	// Configura el display con los parametros
-	lcd.begin(LCD_ROWS, LCD_COLUMNS);
+	display.begin(LCD_ROWS, LCD_COLUMNS);
+	
 	// Borra el contenido del display
 	Cls();
 	
@@ -47,44 +52,44 @@ void Lcd::Start() {
 
 
 /*** Imprime un texto ***/
-void Lcd::Print(String txt) {
+void NGN_Lcd::Print(String txt) {
 	
-	lcd.print(txt);
+	display.print(txt);
 	
 }
 
 
 
 /*** Imprime un texto ***/
-void Lcd::Print(unsigned int x, unsigned int y, String txt) {
+void NGN_Lcd::Print(unsigned int x, unsigned int y, String txt) {
 	
-	lcd.setCursor(x, y);
-	lcd.print(txt);
+	display.setCursor(x, y);
+	display.print(txt);
 	
 }
 
 
 /*** Imprime un caracter especial ***/
-void Lcd::PrintChar(unsigned int x, unsigned int y, byte b) {
+void NGN_Lcd::PrintChar(unsigned int x, unsigned int y, byte b) {
 	
-	lcd.setCursor(x, y);
-	lcd.write(byte(b));
+	display.setCursor(x, y);
+	display.write(byte(b));
 	
 }
 
 
 
 /*** Borra la pantalla ***/
-void Lcd::Cls() {
+void NGN_Lcd::Cls() {
 	
-	lcd.clear();
+	display.clear();
 	
 }
 
 
 
 /*** Borra una parte de la pantalla ***/
-void Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
+void NGN_Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
 	
 	String txt = String("");
 	
@@ -96,6 +101,8 @@ void Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
 
 
 /*** Añade un caracter personalizado ***/
-void Lcd::AddChar(int id, byte character[]) {
-	lcd.createChar(id, character);
+void NGN_Lcd::AddChar(int id, byte character[]) {
+	
+	display.createChar(id, character);
+	
 }

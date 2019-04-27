@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-	Control ambiental
+	N'gine para Arduino
 	Ver 0.0.1-a
 	
 	Proyecto iniciado el 05-04-2019
@@ -10,34 +10,32 @@
 	http://www.nightfoxandco.com
 	contact@nightfoxandco.com
 
-	Control ambiental se distribuye bajo la licencia CREATIVE COMMONS
+	N'gine para Arduino se distribuye bajo la licencia CREATIVE COMMONS
 	"Attribution-NonCommercial 4.0 International"
 	https://creativecommons.org/licenses/by-nc/4.0/
 	
-	Archivo principal del proyecto (ejecucion)
-	
+	Archivo principal de la libreria
+
 *******************************************************************************/
 
 
 
 /*** Includes ***/
-#include "src/core.h"
+#include "ngn.h"
 
 
 
-/*** Crea los objetos ***/
-Core core;
+/*** Singleton de la clase ***/
+NGN ngn;
 
 
 
-/*** Al iniciar ***/
-void setup() {
-	core.Start();
+/*** Contructor ***/
+NGN::NGN() {
 }
 
 
 
-/*** Bucle principal ***/
-void loop() {
-	core.Run();
+/*** Destructor ***/
+NGN::~NGN() {
 }

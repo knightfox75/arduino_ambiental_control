@@ -9,6 +9,10 @@
 	
 	http://www.nightfoxandco.com
 	contact@nightfoxandco.com
+
+	Control ambiental se distribuye bajo la licencia CREATIVE COMMONS
+	"Attribution-NonCommercial 4.0 International"
+	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Nucleo de Ejecucion
 
@@ -24,11 +28,12 @@
 /*** Includes ***/
 // Arduino
 #include <Arduino.h>
+// N'gine
+#include "ngn/ngn.h"
 // Proyecto
 #include "defines.h"
-#include "lcd.h"
-#include "dht.h"
-#include "rtc.h"
+#include "eeprom_data.h"
+#include "ambiental_control.h"
 
 
 /*** Definicion de la clase ***/
@@ -46,7 +51,7 @@ class Core {
 		void Start();
 		
 		// Ejecuta regularmente
-		void Update();
+		void Run();
 		
 	
 	private:
@@ -56,126 +61,16 @@ class Core {
 		bool _update;				// Control de ejecucion del programa
 		
 		// Objetos adicionales de codigo
-		Lcd lcd;
-		Dht dht;
-		Rtc rtc;
+		AmbientalControl ambiental;		// Control de los sensores
+		EepromData eeprom;				// Gestion de la EEPROM
+
+		// Datos del control del programa
+		Eeprom_d data;
 		
 		// Funciones privadas
 		void Logic();		// Logica del programa
 		void Common();		// Metodos comunes a todos los estados
-		
-		// Muestra los datos ambientales
-		void DisplayAmbientalData();
-		bool ambiental_text_data;
-		bool ambiental_text_error;
-		int _temperature;
-		int _humidity;
-		
-		// Muestra la fecha y la hora
-		void DisplayTime();
-		int _hour;
-		int _minute;
-		int _second;
-		bool dot2;
-		
-		// Muestra los datos de las salidas
-		void DisplayOutputState();
-		
-		// Control del sensor ambiental
-		void AmbientalSensorControl();
-		bool temperature_alarm;
-		bool humidity_alarm;
-		bool sensor_alarm;
-		long int sensor_error_count;
-		
-		// Control de la temperatura
-		void TemperatureControl();
-		bool temp_too_high;
-		bool temp_too_low;
-		bool heater_active;
-		
-		// Control de la humedad
-		void HumidityControl();
-		bool humi_too_high;
-		bool humi_too_low;
-		bool humidifier_active;
-		
-		// Control horario, salida y puesta del sol
-		void DayLightControl();
-		int sunrise_time;
-		int sunset_time;
-		bool daylight_active;
-		
-		// Alarmas
-		void Alarm();
-		bool alarm_on;
-		int alarm_repeat_count;
-		bool alarm_blink;
-		int alarm_blink_count;
-		
-		// Caracteres personalizados
-		byte char_off[8] = {
-			B00000000,
-			B00000000,
-			B00000100,
-			B00001110,
-			B00001110,
-			B00000100,
-			B00000000,
-			B00000000
-		};
-		byte char_heater_on[8] = {
-			B00000100,
-			B00010101,
-			B00010101,
-			B00011011,
-			B00010001,
-			B00010001,
-			B00010001,
-			B00001110
-		};
-		byte char_humidifier_on[8] = {
-			B00000100,
-			B00001110,
-			B00001110,
-			B00011111,
-			B00011111,
-			B00011101,
-			B00011111,
-			B00001110
-		};
-		byte char_daylight_on[8] = {
-			B00000000,
-			B00010101,
-			B00001110,
-			B00011011,
-			B00001110,
-			B00010101,
-			B00000000,
-			B00011111
-		};
-		byte char_arrow_down[8] = {
-			B00000100,
-			B00000100,
-			B00000100,
-			B00000100,
-			B00000100,
-			B00011111,
-			B00001110,
-			B00000100
-		};
-		byte char_arrow_up[8] = {
-			B00000100,
-			B00001110,
-			B00011111,
-			B00000100,
-			B00000100,
-			B00000100,
-			B00000100,
-			B00000100
-		};
-		
-
+				
 };
 
 

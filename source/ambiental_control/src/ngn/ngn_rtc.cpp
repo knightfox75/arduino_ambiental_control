@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-	Control ambiental
+	N'gine para Arduino
 	Ver 0.0.1-a
 	
 	Proyecto iniciado el 05-04-2019
@@ -9,6 +9,10 @@
 	
 	http://www.nightfoxandco.com
 	contact@nightfoxandco.com
+
+	N'gine para Arduino se distribuye bajo la licencia CREATIVE COMMONS
+	"Attribution-NonCommercial 4.0 International"
+	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Real Time Clock
 
@@ -17,25 +21,25 @@
 
 
 /*** Includes ***/
-// Includes del proyecto
-#include "rtc.h"
+// Includes de N'gine
+#include "ngn_rtc.h"
 
 
 
-/*** Contructor ***/
-Rtc::Rtc() {
+/*** Constructor ***/
+NGN_Rtc::NGN_Rtc() {
 }
 
 
 
 /*** Destructor ***/
-Rtc::~Rtc() {
+NGN_Rtc::~NGN_Rtc() {
 }
 
 
 
 /*** Inicia el sensor ***/
-void Rtc::Start() {
+void NGN_Rtc::Start() {
 	
 	// Hora y fecha a 0
 	hour = 0;
@@ -49,7 +53,7 @@ void Rtc::Start() {
 	clock.begin();
 	
 	// Fecha y horas iniciales con el tiempo de compilacion
-	// clock.setDateTime(__DATE__, __TIME__);
+	//clock.setDateTime(__DATE__, __TIME__);
 	
 	// Actualiza los valores
 	Read();
@@ -59,7 +63,7 @@ void Rtc::Start() {
 
 
 /*** Lee la hora y fecha actual ***/
-void Rtc::Read() {
+void NGN_Rtc::Read() {
 	
 	// Lee los datos en RAW
 	dt = clock.getDateTime();
