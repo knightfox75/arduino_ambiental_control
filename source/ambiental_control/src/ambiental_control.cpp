@@ -77,6 +77,8 @@ void AmbientalControl::Start(Eeprom_d _data) {
 	humi_too_low = false;
 	pinMode(HUMIDIFIER_PIN, OUTPUT);
 	humidifier_active = false;
+	humidifier_on = false;
+	humidifier_counter = 0x7FFF;
 	
 	// Control de la luz diurna
 	sunrise_time = (data.sunrise_hour * 60) + data.sunrise_minute;
@@ -140,6 +142,9 @@ void AmbientalControl::ForceDisplay() {
 	_temperature = 0xFF;
 	_humidity = 0xFF;
 	
+	// Borra la pantalla
+	ngn.lcd.Cls();
+	
 }
 
 
@@ -148,7 +153,7 @@ void AmbientalControl::ForceDisplay() {
 /*** Muestra los datos ambientales en el LCD ***/
 void AmbientalControl::DisplayAmbientalData() {
 
-	String text = String("");
+	String text = "";
 
 	if (ngn.dht.sensor_status) {
 		
@@ -156,10 +161,11 @@ void AmbientalControl::DisplayAmbientalData() {
 		if (!ambiental_text_data) {
 			
 			ngn.lcd.Cls(0, 0, 16);
-			text = String("T:") + String(ngn.dht.temperature) + String("C");
+			text = "T:" + ngn.string.Int2String(ngn.dht.temperature, 3);
 			ngn.lcd.Print(0, 0, text);
+			ngn.lcd.PrintChar(5, 0, CH_GRADES);
 			
-			text = String("H:") + String(ngn.dht.humidity) + String("%");
+			text = "H:" + ngn.string.Int2String(ngn.dht.humidity, 3) + "%";
 			ngn.lcd.Print(8, 0, text);
 			
 			ambiental_text_data = true;
@@ -169,8 +175,8 @@ void AmbientalControl::DisplayAmbientalData() {
 			
 			// Actualiza la temperatura
 			if (_temperature != ngn.dht.temperature) {
-				ngn.lcd.Cls(2, 0, 5);
-				text = String(ngn.dht.temperature) + String("C");
+				ngn.lcd.Cls(2, 0, 3);
+				text = ngn.string.Int2String(ngn.dht.temperature, 3);
 				ngn.lcd.Print(2, 0, text);
 				_temperature = ngn.dht.temperature;
 			}
@@ -178,9 +184,9 @@ void AmbientalControl::DisplayAmbientalData() {
 			// Alarma de temperatura
 			if (alarm_blink && (temp_too_low || temp_too_high)) {
 				if (temp_too_low) {
-					ngn.lcd.PrintChar(6, 0, 4);
+					ngn.lcd.PrintChar(6, 0, CH_ARROW_DOWN);
 				} else if (temp_too_high) {
-					ngn.lcd.PrintChar(6, 0, 5);
+					ngn.lcd.PrintChar(6, 0, CH_ARROW_UP);
 				}
 			} else {
 				ngn.lcd.Print(6, 0, " ");
@@ -188,8 +194,8 @@ void AmbientalControl::DisplayAmbientalData() {
 			
 			// Actualiza la humedad
 			if (_humidity != ngn.dht.humidity) {
-				ngn.lcd.Cls(10, 0, 5);
-				text = String(ngn.dht.humidity) + String("%");
+				ngn.lcd.Cls(10, 0, 3);
+				text = ngn.string.Int2String(ngn.dht.humidity, 3);
 				ngn.lcd.Print(10, 0, text);
 				_humidity = ngn.dht.humidity;
 			}
@@ -197,9 +203,9 @@ void AmbientalControl::DisplayAmbientalData() {
 			// Alarma de humedad
 			if (alarm_blink && (humi_too_low || humi_too_high)) {
 				if (humi_too_low) {
-					ngn.lcd.PrintChar(14, 0, 4);
+					ngn.lcd.PrintChar(14, 0, CH_ARROW_DOWN);
 				} else if (humi_too_high) {
-					ngn.lcd.PrintChar(14, 0, 5);
+					ngn.lcd.PrintChar(14, 0, CH_ARROW_UP);
 				}
 			} else {
 				ngn.lcd.Print(14, 0, " ");
@@ -230,27 +236,21 @@ void AmbientalControl::DisplayTime() {
 	if (ngn.rtc.second == _second) return;
 	_second = ngn.rtc.second;
 	
-	String text = String("");
+	String text = "";
 	
 	// Marcador de segundos
-	text = dot2 ? String(":"):String(" ");
+	text = dot2 ? ":":" ";
 	ngn.lcd.Print(2, 1, text);
 	dot2 = !dot2;
 	
 	// Minutos
 	if (ngn.rtc.minute == _minute) return;
-	text = String("");
-	if (ngn.rtc.minute < 10) text += String("0");
-	text += String(ngn.rtc.minute);
-	ngn.lcd.Print(3, 1, text);
+	ngn.lcd.Print(3, 1, ngn.string.Int2String(ngn.rtc.minute, 2));
 	_minute = ngn.rtc.minute;
 	
 	// Horas
 	if (ngn.rtc.hour == _hour) return;
-	text = String("");
-	if (ngn.rtc.hour < 10) text += String("0");
-	text += String(ngn.rtc.hour);
-	ngn.lcd.Print(0, 1, text);
+	ngn.lcd.Print(0, 1, ngn.string.Int2String(ngn.rtc.hour, 2));
 	_hour = ngn.rtc.hour;
 
 }
@@ -260,21 +260,21 @@ void AmbientalControl::DisplayTime() {
 void AmbientalControl::DisplayOutputState() {
 	
 	if (heater_active) {
-		ngn.lcd.PrintChar(11, 1, 1);
+		ngn.lcd.PrintChar(11, 1, CH_HEATER_ON);
 	} else {
-		ngn.lcd.PrintChar(11, 1, 0);
+		ngn.lcd.PrintChar(11, 1, CH_OFF);
 	}
 	
-	if (humidifier_active) {
-		ngn.lcd.PrintChar(13, 1, 2);
+	if (humidifier_on) {
+		ngn.lcd.PrintChar(13, 1, CH_HUMIDIFIER_ON);
 	} else {
-		ngn.lcd.PrintChar(13, 1, 0);
+		ngn.lcd.PrintChar(13, 1, CH_OFF);
 	}
 	
 	if (daylight_active) {
-		ngn.lcd.PrintChar(15, 1, 3);
+		ngn.lcd.PrintChar(15, 1, CH_DAYLIGHT_ON);
 	} else {
-		ngn.lcd.PrintChar(15, 1, 0);
+		ngn.lcd.PrintChar(15, 1, CH_OFF);
 	}
 	
 }
@@ -311,13 +311,13 @@ void AmbientalControl::TemperatureControl() {
 	// Si el sensor esta operativo
 	if (ngn.dht.sensor_status) {
 	
-		if (ngn.dht.temperature <= data.min_temp) {
+		if ((ngn.dht.temperature <= data.min_temp) && !heater_active) {
 			
 			// Enciende la lampara
 			digitalWrite(IR_LIGHT_PIN, 1);
 			heater_active = true;
 			
-		} else if (ngn.dht.temperature >= data.max_temp) {
+		} else if ((ngn.dht.temperature >= data.max_temp) && heater_active) {
 			
 			// Apaga la lampara
 			digitalWrite(IR_LIGHT_PIN, 0);
@@ -351,18 +351,42 @@ void AmbientalControl::HumidityControl() {
 	// Si el sensor esta operativo
 	if (ngn.dht.sensor_status) {
 	
-		if (ngn.dht.humidity <= data.min_humi) {
+		if ((ngn.dht.humidity <= data.min_humi) && !humidifier_active) {
 			
-			// Enciende el humidificador
-			digitalWrite(HUMIDIFIER_PIN, 1);
+			// Marca para encender el humidificador
 			humidifier_active = true;
-			
-		} else if (ngn.dht.humidity >= data.max_humi) {
+						
+		} else if ((ngn.dht.humidity >= data.max_humi) && humidifier_active) {
 			
 			// Apaga el humidificador
 			digitalWrite(HUMIDIFIER_PIN, 0);
 			humidifier_active = false;
+			humidifier_on = false;
+			humidifier_counter = 0x7FFF;
 			
+		}
+		
+		
+		// Control ciclico del humidificador
+		if (humidifier_active) {
+			// Contador de tiempo
+			humidifier_counter ++;
+			// Empieza el ciclo de trabajo
+			if (humidifier_on) {		// Control del estado conectado
+				if (humidifier_counter >= data.humi_duty_cycle_on) {
+					// Apaga el humidificador
+					digitalWrite(HUMIDIFIER_PIN, 0);
+					humidifier_on = false;
+					humidifier_counter = 0;
+				}
+			} else {						// Control de estado desconectado
+				if (humidifier_counter >= data.humi_duty_cycle_off) {
+					// Enciende el humidificador
+					digitalWrite(HUMIDIFIER_PIN, 1);
+					humidifier_on = true;
+					humidifier_counter = 0;
+				}
+			}	
 		}
 		
 		// Control de rango de humedades relativas peligrosas
@@ -375,6 +399,8 @@ void AmbientalControl::HumidityControl() {
 		// Si el sensor no esta operativo, desconectalo todo
 		digitalWrite(HUMIDIFIER_PIN, 0);
 		humidifier_active = false;
+		humidifier_on = false;
+		humidifier_counter = 0x7FFF;
 		humi_too_low = false;
 		humi_too_high = false;
 		humidity_alarm = false;

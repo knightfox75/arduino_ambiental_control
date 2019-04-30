@@ -114,7 +114,7 @@ void NGN_Input::Read() {
 		p = (i * SIZE_OF_KEY);
 		
 		// Si tiene un PIN valido asignado
-		if (key[(p + _PIN)] < 128) {
+		if (key[(p + _PIN)] < 0x80) {
 			// Estados por defecto de UP y DOWN
 			key[(p + _UP)] = 0x00;
 			key[(p + _DOWN)] = 0x00;

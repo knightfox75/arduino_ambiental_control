@@ -34,6 +34,7 @@
 #include "defines.h"
 #include "eeprom_data.h"
 #include "ambiental_control.h"
+#include "menu.h"
 
 
 /*** Definicion de la clase ***/
@@ -56,12 +57,20 @@ class Core {
 	
 	private:
 	
+		// Maquina de estados
+		int st, next_st;
+		const static int ST_START_AMBIENTAL = 0;
+		const static int ST_RUN_AMBIENTAL = 1;
+		const static int ST_START_MENU = 2;
+		const static int ST_RUN_MENU = 3;
+	
 		// Variables de control
 		bool _led_blink;			// Control del blink del led
 		bool _update;				// Control de ejecucion del programa
 		
 		// Objetos adicionales de codigo
 		AmbientalControl ambiental;		// Control de los sensores
+		Menu menu;						// Menu de gestion
 		EepromData eeprom;				// Gestion de la EEPROM
 
 		// Datos del control del programa

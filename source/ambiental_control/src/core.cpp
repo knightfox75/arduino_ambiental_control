@@ -52,30 +52,34 @@ void Core::Start() {
 	ngn.lcd.Start();
 	
 	// Añade los characteres personalizados
-	ngn.lcd.AddChar(0, char_off);
-	ngn.lcd.AddChar(1, char_heater_on);
-	ngn.lcd.AddChar(2, char_humidifier_on);
-	ngn.lcd.AddChar(3, char_daylight_on);
-	ngn.lcd.AddChar(4, char_arrow_down);
-	ngn.lcd.AddChar(5, char_arrow_up);
+	ngn.lcd.AddChar(CH_OFF, CHAR_OFF);
+	ngn.lcd.AddChar(CH_HEATER_ON, CHAR_HEATER_ON);
+	ngn.lcd.AddChar(CH_HUMIDIFIER_ON, CHAR_HUMIDIFIER_ON);
+	ngn.lcd.AddChar(CH_DAYLIGHT_ON, CHAR_DAYLIGHT_ON);
+	ngn.lcd.AddChar(CH_ARROW_DOWN, CHAR_ARROW_DOWN);
+	ngn.lcd.AddChar(CH_ARROW_UP, CHAR_ARROW_UP);
+	ngn.lcd.AddChar(CH_GRADES, CHAR_GRADES);
 	
 	// Mensaje de inicio
-	ngn.lcd.Print(0, 0, "Boot up...");
+	ngn.lcd.Print(0, 0, "Starting...");
 	
 	// Carga los datos desde la SRAM
 	data = eeprom.Load();
 	
 	// Configura los metodos de entrada
 	ngn.input.Start(NUMBER_OF_KEYS);
-	ngn.input.KeyAssign(SENSOR_WATER_LOW_ID, SENSOR_WATER_LOW_PIN);
-	ngn.input.KeyAssign(SENSOR_WATER_EMPTY_ID, SENSOR_WATER_EMPTY_PIN);
 	ngn.input.KeyAssign(KEY_UP_ID, KEY_UP_PIN);
 	ngn.input.KeyAssign(KEY_DOWN_ID, KEY_DOWN_PIN);
 	ngn.input.KeyAssign(KEY_LEFT_ID, KEY_LEFT_PIN);
 	ngn.input.KeyAssign(KEY_RIGHT_ID, KEY_RIGHT_PIN);
+	ngn.input.KeyAssign(KEY_A_ID, KEY_A_PIN);
+	ngn.input.KeyAssign(KEY_B_ID, KEY_B_PIN);
 	
 	// Inicia el control ambiental
 	ambiental.Start(data);
+	
+	// Configura la maquina de estados
+	st = next_st = ST_START_AMBIENTAL;
 			
 }
 
@@ -106,9 +110,38 @@ void Core::Run() {
 void Core::Logic() {
 	
 	Common();					// Metodos comunes
-	ambiental.Run();			// Ejecuta el control ambiental
-	ambiental.DisplayData();	// Muestra la informacion en pantalla
 	
+	// Maquina de estados
+	switch (st) {
+		
+		case ST_START_AMBIENTAL:
+			ambiental.ForceDisplay();		// Fuerza la impresion de los datos basicos
+			next_st = ST_RUN_AMBIENTAL;		// Siguiente estado
+			break;
+		
+		case ST_RUN_AMBIENTAL:
+			ambiental.DisplayData();		// Muestra la informacion en pantalla
+			// Si se pulsa la tecla RIGHT, ve al menu
+			if (ngn.input.KeyDown(KEY_RIGHT_ID)) {
+				next_st = ST_START_MENU;
+			}
+			break;
+			
+		case ST_START_MENU:
+			menu.Start(data);
+			next_st = ST_RUN_MENU;
+			break;
+			
+		case ST_RUN_MENU:
+			if (menu.Run() >= 0) {
+				data = menu.GetData();
+				next_st = ST_START_AMBIENTAL;
+			}
+			break;
+		
+	}
+	st = next_st;
+		
 }
 
 
@@ -119,15 +152,15 @@ void Core::Common() {
 	// Lectura de los metodos de entrada
 	ngn.input.Read();
 	
+	// Ejecuta el control ambiental
+	ambiental.Run();
+	
 	// Led de actividad
 	if (CORE_LED_ACTIVITY) {
 		digitalWrite(LED_BUILTIN, _led_blink);
 		_led_blink = !_led_blink;
 	}
-		
-	// Test
-	digitalWrite(LED_BUILTIN, ngn.input.KeyHeld(KEY_RIGHT_ID));
-		
+				
 }
 
 

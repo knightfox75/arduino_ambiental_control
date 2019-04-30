@@ -28,9 +28,11 @@
 /*** Includes ***/
 // Arduino
 #include <Arduino.h>
-// N'gine
-#include "ngn_dht.h"
+// N'gine (Metodos propios)
 #include "ngn_input.h"
+#include "ngn_string.h"
+// N'gine (Acceso a modulos de hardware)
+#include "ngn_dht.h"
 #include "ngn_lcd.h"
 #include "ngn_rtc.h"
 
@@ -49,6 +51,8 @@ class NGN {
 		
 		// Modulos de la libreria
 		NGN_Input input;			// Metodos de entrada
+		NGN_String string;			// Manipulacion de cadenas de texto
+		// Modulos de harware
 		NGN_Lcd lcd;				// Display LCD
 		NGN_Rtc rtc;				// Reloj de tiempo real
 		NGN_Dht dht;				// Sensor de temperatura y humedad relativa

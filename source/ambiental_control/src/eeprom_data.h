@@ -52,6 +52,9 @@ class EepromData {
 		// Guarda los datos en la EEPROM
 		void Save(Eeprom_d data);
 		
+		// Compara dos estructuras de datos
+		bool Compare(Eeprom_d data_a, Eeprom_d data_b);
+		
 
 	private:
 	
@@ -64,11 +67,11 @@ class EepromData {
 		// Valores por defecto
 		Eeprom_d DefaultValues();
 		
-		// Checksum
-		unsigned int CheckSum(Eeprom_d data);
-		
 		// Vacia la EEPROM
 		void EraseEeprom();
+		
+		// Checksum
+		unsigned int CheckSum(Eeprom_d data);
 	
 };
 

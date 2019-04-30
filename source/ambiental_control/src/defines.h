@@ -36,7 +36,7 @@ const int CORE_LED_ACTIVITY = 0;				// Led de actividad SI/NO
 
 
 /*** Caracteres personalizados ***/
-const byte char_off[8] = {
+const byte CHAR_OFF[8] = {
 	B00000000,
 	B00000000,
 	B00000100,
@@ -46,7 +46,9 @@ const byte char_off[8] = {
 	B00000000,
 	B00000000
 };
-const byte char_heater_on[8] = {
+const byte CH_OFF = 0;
+
+const byte CHAR_HEATER_ON[8] = {
 	B00000100,
 	B00010101,
 	B00010101,
@@ -56,7 +58,9 @@ const byte char_heater_on[8] = {
 	B00010001,
 	B00001110
 };
-const byte char_humidifier_on[8] = {
+const byte CH_HEATER_ON  = 1;
+
+const byte CHAR_HUMIDIFIER_ON[8] = {
 	B00000100,
 	B00001110,
 	B00001110,
@@ -66,7 +70,9 @@ const byte char_humidifier_on[8] = {
 	B00011111,
 	B00001110
 };
-const byte char_daylight_on[8] = {
+const byte CH_HUMIDIFIER_ON = 2;
+
+const byte CHAR_DAYLIGHT_ON[8] = {
 	B00000000,
 	B00010101,
 	B00001110,
@@ -76,7 +82,9 @@ const byte char_daylight_on[8] = {
 	B00000000,
 	B00011111
 };
-const byte char_arrow_down[8] = {
+const byte CH_DAYLIGHT_ON = 3;
+
+const byte CHAR_ARROW_DOWN[8] = {
 	B00000100,
 	B00000100,
 	B00000100,
@@ -86,7 +94,9 @@ const byte char_arrow_down[8] = {
 	B00001110,
 	B00000100
 };
-const byte char_arrow_up[8] = {
+const byte CH_ARROW_DOWN = 4;
+
+const byte CHAR_ARROW_UP[8] = {
 	B00000100,
 	B00001110,
 	B00011111,
@@ -96,40 +106,65 @@ const byte char_arrow_up[8] = {
 	B00000100,
 	B00000100
 };
+const byte CH_ARROW_UP = 5;
+
+const byte CHAR_GRADES[8] = {
+	B00000110,
+	B00001001,
+	B00001001,
+	B00000110,
+	B00000000,
+	B00000000,
+	B00000000,
+	B00000000
+};
+const byte CH_GRADES = 6;
 
 
 
 /*** Metodos de entrada ***/
 const unsigned int NUMBER_OF_KEYS = 6;
-const unsigned int SENSOR_WATER_LOW_ID = 0;
-const unsigned int SENSOR_WATER_LOW_PIN = 30;
-const unsigned int SENSOR_WATER_EMPTY_ID = 1;
-const unsigned int SENSOR_WATER_EMPTY_PIN = 31;
-const unsigned int KEY_UP_ID = 2;
-const unsigned int KEY_UP_PIN = 32;
-const unsigned int KEY_DOWN_ID = 3;
-const unsigned int KEY_DOWN_PIN = 33;
-const unsigned int KEY_LEFT_ID = 4;
-const unsigned int KEY_LEFT_PIN = 34;
-const unsigned int KEY_RIGHT_ID = 5;
-const unsigned int KEY_RIGHT_PIN = 35;
+const unsigned int KEY_RIGHT_ID = 0;
+const unsigned int KEY_RIGHT_PIN = 23;
+const unsigned int KEY_DOWN_ID = 1;
+const unsigned int KEY_DOWN_PIN = 25;
+const unsigned int KEY_LEFT_ID = 2;
+const unsigned int KEY_LEFT_PIN = 27;
+const unsigned int KEY_UP_ID = 3;
+const unsigned int KEY_UP_PIN = 29;
+const unsigned int KEY_B_ID = 4;
+const unsigned int KEY_B_PIN = 31;
+const unsigned int KEY_A_ID = 5;
+const unsigned int KEY_A_PIN = 33;
 
 
 
 /*** Datos por defecto ***/
-const int TEMP_MIN_TRIGGER = 25;		// Temperatura minima
-const int TEMP_MAX_TRIGGER = 30;		// Temperatura maxima
-const int TEMP_MIN_ALARM = 18;			// Alarma de temperatura minima
-const int TEMP_MAX_ALARM = 35;			// Alarma de temperatura maxima
-const int HUMIDITY_MIN_TRIGGER = 60;	// Humedad minima
-const int HUMIDITY_MAX_TRIGGER = 70;	// Humedad maxima
-const int HUMIDITY_MIN_ALARM = 50;		// Alarma de humedad baja
-const int HUMIDITY_MAX_ALARM = 80;		// Alarma de humedad alta
-const int SUNRISE_HOUR = 7;				// Hora de salida del sol
+const int TEMP_MIN_TRIGGER = 25;			// Temperatura minima
+const int TEMP_MAX_TRIGGER = 30;			// Temperatura maxima
+const int TEMP_MIN_ALARM = 18;				// Alarma de temperatura minima
+const int TEMP_MAX_ALARM = 35;				// Alarma de temperatura maxima
+const int HUMIDITY_MIN_TRIGGER = 60;		// Humedad minima
+const int HUMIDITY_MAX_TRIGGER = 70;		// Humedad maxima
+const int HUMIDITY_MIN_ALARM = 50;			// Alarma de humedad baja
+const int HUMIDITY_MAX_ALARM = 80;			// Alarma de humedad alta
+const int HUMIDITY_DUTY_CYCLE_ON = 100;		// Ciclo de activacion del humidificador (ON) en ticks (5s)
+const int HUMIDITY_DUTY_CYCLE_OFF = 400;	// Ciclo de activacion del humidificador (OFF) en ticks (20s)
+const int SUNRISE_HOUR = 7;					// Hora de salida del sol
 const int SUNRISE_MINUTE = 30;
-const int SUNSET_HOUR = 20;				// Hora de la puesta del sol
+const int SUNSET_HOUR = 20;					// Hora de la puesta del sol
 const int SUNSET_MINUTE = 30;
-const int BUZZER_ALARM = 0;				// Alarma sonora SI/NO
+const int BUZZER_ALARM = 0;					// Alarma sonora SI/NO
+
+
+
+/*** Rango de valores absolutos ***/
+const int ABS_TEMP_MIN = 5;					// Temperatura
+const int ABS_TEMP_MAX = 60;
+const int ABS_HUMI_MIN = 0;					// Humedad
+const int ABS_HUMI_MAX = 100;
+const int ABS_DATETIME_YEAR_MIN = 2018;		// Fecha y hora
+const int ABS_DATETIME_YEAR_MAX = 2199;		
 
 
 
@@ -142,17 +177,19 @@ const unsigned int HUMIDIFIER_PIN = 42;		// Pin para activar el humidificador
 const unsigned int DAY_LIGHT_PIN = 44;		// Pin para activar la luz de dia
 const unsigned int BUZZER_PIN = 52;			// Pin Buzzer de Alarma
 // Parametros de la alarma
-const int ALARM_TONE = 440;				// Tono de la alarma
-const int ALARM_TONE_ON = 500;			// Duracion del tono
-const int ALARM_TONE_OFF = 50;			// Pausa entre tonos (ticks de ejecucion)
-const int ALARM_BLINK_SPEED = 10;		// Velocidad del parpadeo en ticks;
-const int SENSOR_ERROR_TIMEOUT = 100;	// Time out del sensor	
+const int ALARM_TONE = 440;					// Tono de la alarma
+const int ALARM_TONE_ON = 500;				// Duracion del tono
+const int ALARM_TONE_OFF = 50;				// Pausa entre tonos (ticks de ejecucion)
+const int ALARM_BLINK_SPEED = 10;			// Velocidad del parpadeo en ticks (5cent * 10 = 50cent, 0.5s);
+const int SENSOR_ERROR_TIMEOUT = 100;		// Time out del sensor	
 
 
 
 /*** Prototipos de datos de la EEPROM***/
 struct Eeprom_d {
 	unsigned int checksum;
+	unsigned int humi_duty_cycle_on;
+	unsigned int humi_duty_cycle_off;
 	byte min_temp;
 	byte max_temp;
 	byte min_temp_alarm;

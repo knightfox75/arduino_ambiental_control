@@ -99,6 +99,8 @@ class AmbientalControl {
 		bool humi_too_high;
 		bool humi_too_low;
 		bool humidifier_active;
+		bool humidifier_on;
+		unsigned int humidifier_counter;
 		
 		// Control horario, salida y puesta del sol
 		void DayLightControl();

@@ -28,12 +28,12 @@
 
 /*** Configuracion de la clase NGN_Lcd (ngn_lcd.h) ***/
 // Pines de conexion de la pantalla
-const unsigned int LCD_PIN_RS = 7; 
-const unsigned int LCD_PIN_ENABLE = 8;
-const unsigned int LCD_PIN_D4 = 9;
-const unsigned int LCD_PIN_D5 = 10;
-const unsigned int LCD_PIN_D6 = 11;
-const unsigned int LCD_PIN_D7 = 12;
+const unsigned int LCD_PIN_RS = 22; 
+const unsigned int LCD_PIN_ENABLE = 24;
+const unsigned int LCD_PIN_D4 = 26;
+const unsigned int LCD_PIN_D5 = 28;
+const unsigned int LCD_PIN_D6 = 30;
+const unsigned int LCD_PIN_D7 = 32;
 // Parametros de la pantalla
 const unsigned int LCD_ROWS = 2;
 const unsigned int LCD_COLUMNS = 16;

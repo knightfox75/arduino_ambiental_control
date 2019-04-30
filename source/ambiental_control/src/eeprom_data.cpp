@@ -90,6 +90,8 @@ Eeprom_d EepromData::DefaultValues() {
 	data.max_humi = HUMIDITY_MAX_TRIGGER;
 	data.min_humi_alarm = HUMIDITY_MIN_ALARM;
 	data.max_humi_alarm = HUMIDITY_MAX_ALARM;
+	data.humi_duty_cycle_on = HUMIDITY_DUTY_CYCLE_ON;
+	data.humi_duty_cycle_off = HUMIDITY_DUTY_CYCLE_OFF;
 	data.sunrise_hour = SUNRISE_HOUR;
 	data.sunrise_minute = SUNRISE_MINUTE;
 	data.sunset_hour = SUNSET_HOUR;
@@ -122,6 +124,10 @@ unsigned int EepromData::CheckSum(Eeprom_d data) {
 		data.min_humi_alarm
 		+
 		data.max_humi_alarm
+		+
+		data.humi_duty_cycle_on
+		+
+		data.humi_duty_cycle_off
 		+
 		data.sunrise_hour
 		+
@@ -170,6 +176,36 @@ void EepromData::Write(Eeprom_d data) {
 	
 	// Escribe la los datos
 	EEPROM.put(addr, data);
+	
+}
+
+
+
+/*** Compara si dos estructuras de datos son identicas ***/
+bool EepromData::Compare(Eeprom_d data_a, Eeprom_d data_b) {
+	
+	// Resultado
+	bool r = true;
+	
+	// Compara los datos
+	r &= (data_a.min_temp == data_b.min_temp) ? true:false;
+	r &= (data_a.max_temp == data_b.max_temp) ? true:false;
+	r &= (data_a.min_temp_alarm == data_b.min_temp_alarm) ? true:false;
+	r &= (data_a.max_temp_alarm == data_b.max_temp_alarm) ? true:false;
+	r &= (data_a.min_humi == data_b.min_humi) ? true:false;
+	r &= (data_a.max_humi == data_b.max_humi) ? true:false;
+	r &= (data_a.min_humi_alarm == data_b.min_humi_alarm) ? true:false;
+	r &= (data_a.max_humi_alarm == data_b.max_humi_alarm) ? true:false;
+	r &= (data_a.humi_duty_cycle_on == data_b.humi_duty_cycle_on) ? true:false;
+	r &= (data_a.humi_duty_cycle_off == data_b.humi_duty_cycle_off) ? true:false;
+	r &= (data_a.sunrise_hour == data_b.sunrise_hour) ? true:false;
+	r &= (data_a.sunrise_minute == data_b.sunrise_minute) ? true:false;
+	r &= (data_a.sunset_hour == data_b.sunset_hour) ? true:false;
+	r &= (data_a.sunset_minute == data_b.sunset_minute) ? true:false;
+	r &= (data_a.alarm_buzzer == data_b.alarm_buzzer) ? true:false;
+	
+	// Devuelve el resultado
+	return r;
 	
 }
 

@@ -91,9 +91,9 @@ void NGN_Lcd::Cls() {
 /*** Borra una parte de la pantalla ***/
 void NGN_Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
 	
-	String txt = String("");
+	String txt = "";
 	
-	for (unsigned int i = x; i < (x + length); i ++) txt += String(" ");
+	for (unsigned int i = x; i < (x + length); i ++) txt += " ";
 	Print(x, y, txt);
 	
 }
