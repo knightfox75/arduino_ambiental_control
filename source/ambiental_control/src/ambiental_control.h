@@ -55,8 +55,8 @@ class AmbientalControl {
 		// Muestra la informacion en pantalla
 		void DisplayData();
 		
-		// Fuerza el refresco de la pantalla en el proximo ciclo
-		void ForceDisplay();
+		// Fuerza el refresco de la pantalla en el proximo ciclo y actualiza los datos de referencia
+		void UpdateData(Eeprom_d _data);
 	
 	
 	private:

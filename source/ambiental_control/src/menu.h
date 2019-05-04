@@ -82,9 +82,10 @@ class Menu {
 		int MenuSystem();
 		
 		// Cambia el valor de un parametro
-		int SetValue(int &value, int min_val, int max_val, byte unit);
+		int SetValue(int &value, int min_val, int max_val, byte unit, byte width);
 		static const byte UNIT_GRADES = 1;
 		static const byte UNIT_PERCENT = 2;
+		static const byte UNIT_SECONDS = 3;
 		
 		// Maquina de estados
 		int st, next_st;								// Control del menu
@@ -103,10 +104,19 @@ class Menu {
 		static const int TEMPERATURE_ST_LOWALARM = 103;
 		static const int TEMPERATURE_ST_HIALARM = 104;
 		
+		// Opciones de el menu "Humedad"
+		static const int HUMIDITY_ST_MIN = 201;
+		static const int HUMIDITY_ST_MAX = 202;
+		static const int HUMIDITY_ST_LOWALARM = 203;
+		static const int HUMIDITY_ST_HIALARM = 204;
+		static const int HUMIDITY_ST_ONTIME = 205;
+		static const int HUMIDITY_ST_OFFTIME = 206;
+		
 		// Parametros comunes a todos los menus
 		static const int MENU_OP_EXIT = 0x7FFF;
 		const int AUTO_KEY_DELAY = 20;				// 20 ticks, 1s
 		const int AUTO_KEY_REPEAT = 2;				// 2 ticks, 0.1s
+		const String CURSOR_CHAR = ">";				// Caracter para el cursor
 		
 		// Variables adicionales de control
 		int auto_key_delay;
@@ -143,6 +153,31 @@ class Menu {
 		static const int TEMPERATURE_MENU_OP_MAX = 1;
 		static const int TEMPERATURE_MENU_OP_LOWALARM = 2;
 		static const int TEMPERATURE_MENU_OP_HIALARM = 3;
+		
+		// Menu de configuracion de la humedad relativa
+		int humidity_menu_op, humidity_menu_op_last;		// Control de opciones
+		static const int HUMIDITY_MENU_OPTIONS = 6;
+		const String humidity_menu_text[HUMIDITY_MENU_OPTIONS] = {
+			"Min",
+			"Max",
+			"Low Alarm",
+			"Hi Alarm",
+			"ON Time",
+			"OFF Time"
+		};
+		static const int HUMIDITY_MENU_OP_MIN = 0;
+		static const int HUMIDITY_MENU_OP_MAX = 1;
+		static const int HUMIDITY_MENU_OP_LOWALARM = 2;
+		static const int HUMIDITY_MENU_OP_HIALARM = 3;
+		static const int HUMIDITY_MENU_OP_ONTIME = 4;
+		static const int HUMIDITY_MENU_OP_OFFTIME = 5;
+		
+		
+		// Convierte Tics a Segundos y viceversa
+		const unsigned int BASE = (1000 / CORE_FREQ_DIVIDER);
+		const unsigned int TICK = CORE_MAIN_UPDATE_FREQ;
+		unsigned int Ticks2Seconds(unsigned long int ticks);
+		unsigned long int Seconds2Ticks(unsigned int seconds);
 		
 					
 };

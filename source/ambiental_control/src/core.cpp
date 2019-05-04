@@ -45,8 +45,8 @@ void Core::Start() {
 	_update = false;
 	_led_blink = false;
 	
-	// Configura el led interno
-	pinMode(LED_BUILTIN, OUTPUT);
+	// Configura el led de actividad
+	pinMode(CORE_LED_PIN, OUTPUT);
 		
 	// Configura el display LCD
 	ngn.lcd.Start();
@@ -115,7 +115,7 @@ void Core::Logic() {
 	switch (st) {
 		
 		case ST_START_AMBIENTAL:
-			ambiental.ForceDisplay();		// Fuerza la impresion de los datos basicos
+			ambiental.UpdateData(data);		// Actualiza la informacion
 			next_st = ST_RUN_AMBIENTAL;		// Siguiente estado
 			break;
 		
@@ -157,7 +157,7 @@ void Core::Common() {
 	
 	// Led de actividad
 	if (CORE_LED_ACTIVITY) {
-		digitalWrite(LED_BUILTIN, _led_blink);
+		digitalWrite(CORE_LED_PIN, _led_blink);
 		_led_blink = !_led_blink;
 	}
 				

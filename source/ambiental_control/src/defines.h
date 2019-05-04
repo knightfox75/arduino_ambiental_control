@@ -31,7 +31,8 @@
 /*** Configuracion de los tiempos de ejecucion ***/
 const long int CORE_FREQ_DIVIDER = 10;			// Base de division del tiempo de ejecucion para los milisegundos (10 por defecto, para escalar los milisegundos a centesimas de segundo)
 const long int CORE_MAIN_UPDATE_FREQ = 5;		// Frecuencia de actualizacion del programa (principal)
-const int CORE_LED_ACTIVITY = 0;				// Led de actividad SI/NO
+const int CORE_LED_ACTIVITY = 1;				// Led de actividad SI/NO
+const int CORE_LED_PIN = 46;
 
 
 
@@ -144,17 +145,17 @@ const int TEMP_MIN_TRIGGER = 25;			// Temperatura minima
 const int TEMP_MAX_TRIGGER = 30;			// Temperatura maxima
 const int TEMP_MIN_ALARM = 18;				// Alarma de temperatura minima
 const int TEMP_MAX_ALARM = 35;				// Alarma de temperatura maxima
-const int HUMIDITY_MIN_TRIGGER = 60;		// Humedad minima
-const int HUMIDITY_MAX_TRIGGER = 70;		// Humedad maxima
-const int HUMIDITY_MIN_ALARM = 50;			// Alarma de humedad baja
-const int HUMIDITY_MAX_ALARM = 80;			// Alarma de humedad alta
-const int HUMIDITY_DUTY_CYCLE_ON = 100;		// Ciclo de activacion del humidificador (ON) en ticks (5s)
-const int HUMIDITY_DUTY_CYCLE_OFF = 400;	// Ciclo de activacion del humidificador (OFF) en ticks (20s)
+const int HUMIDITY_MIN_TRIGGER = 75;		// Humedad minima
+const int HUMIDITY_MAX_TRIGGER = 85;		// Humedad maxima
+const int HUMIDITY_MIN_ALARM = 70;			// Alarma de humedad baja
+const int HUMIDITY_MAX_ALARM = 95;			// Alarma de humedad alta
+const long int HUMIDITY_DUTY_CYCLE_ON = 100;		// Ciclo de activacion del humidificador (ON) en ticks (5s)
+const long int HUMIDITY_DUTY_CYCLE_OFF = 400;		// Ciclo de activacion del humidificador (OFF) en ticks (20s)
 const int SUNRISE_HOUR = 7;					// Hora de salida del sol
 const int SUNRISE_MINUTE = 30;
 const int SUNSET_HOUR = 20;					// Hora de la puesta del sol
 const int SUNSET_MINUTE = 30;
-const int BUZZER_ALARM = 0;					// Alarma sonora SI/NO
+const int BUZZER_ALARM = 1;					// Alarma sonora SI/NO
 
 
 
@@ -163,6 +164,8 @@ const int ABS_TEMP_MIN = 5;					// Temperatura
 const int ABS_TEMP_MAX = 60;
 const int ABS_HUMI_MIN = 0;					// Humedad
 const int ABS_HUMI_MAX = 100;
+const int ABS_DUTY_MIN = 1;					// Limites del ciclo de trabajo
+const int ABS_DUTY_MAX = 3600;
 const int ABS_DATETIME_YEAR_MIN = 2018;		// Fecha y hora
 const int ABS_DATETIME_YEAR_MAX = 2199;		
 
@@ -173,9 +176,9 @@ const int ABS_DATETIME_YEAR_MAX = 2199;
 const unsigned int DHT_PIN = 50;			// Sensor de temperatura y humedad
 // Configuracion de salidas
 const unsigned int IR_LIGHT_PIN = 40;		// Pin para activar la luz IR
-const unsigned int HUMIDIFIER_PIN = 42;		// Pin para activar el humidificador
-const unsigned int DAY_LIGHT_PIN = 44;		// Pin para activar la luz de dia
-const unsigned int BUZZER_PIN = 52;			// Pin Buzzer de Alarma
+const unsigned int HUMIDIFIER_PIN = 48;		// Pin para activar el humidificador
+const unsigned int DAY_LIGHT_PIN = 42;		// Pin para activar la luz de dia
+const unsigned int BUZZER_PIN = 41;			// Pin Buzzer de Alarma
 // Parametros de la alarma
 const int ALARM_TONE = 440;					// Tono de la alarma
 const int ALARM_TONE_ON = 500;				// Duracion del tono
@@ -187,9 +190,9 @@ const int SENSOR_ERROR_TIMEOUT = 100;		// Time out del sensor
 
 /*** Prototipos de datos de la EEPROM***/
 struct Eeprom_d {
-	unsigned int checksum;
-	unsigned int humi_duty_cycle_on;
-	unsigned int humi_duty_cycle_off;
+	unsigned long int checksum;
+	unsigned long int humi_duty_cycle_on;
+	unsigned long int humi_duty_cycle_off;
 	byte min_temp;
 	byte max_temp;
 	byte min_temp_alarm;

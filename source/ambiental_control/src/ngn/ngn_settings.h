@@ -43,7 +43,7 @@ const unsigned int LCD_COLUMNS = 16;
 /*** Configuracion de la clase NGN_Dht (ngn_dht.h) ***/
 // Parametros del sensor
 const long int DHT_FREQ_DIVIDER = 10;	// Base de division de tiempo
-const long int DHT_UPDATE_FREQ = 150;	// Frecuencia de actualizacion del sensor
+const long int DHT_UPDATE_FREQ = 200;	// Frecuencia de actualizacion del sensor
 
 
 

@@ -128,9 +128,13 @@ void AmbientalControl::DisplayData() {
 
 
 
-/*** Fuerza mostrar la informacion en el proximo ciclo ***/
-void AmbientalControl::ForceDisplay() {
+/*** Fuerza el refresco de la pantalla en el proximo ciclo y actualiza los datos de referencia ***/
+void AmbientalControl::UpdateData(Eeprom_d _data) {
 	
+	// Actualiza los datos
+	data = _data;
+	
+	// Reinicia todos los flags
 	ambiental_text_data = false;
 	ambiental_text_error = false;
 	

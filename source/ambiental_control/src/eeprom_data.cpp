@@ -106,7 +106,7 @@ Eeprom_d EepromData::DefaultValues() {
 
 
 /*** Genera el CheckSum ***/
-unsigned int EepromData::CheckSum(Eeprom_d data) {
+unsigned long int EepromData::CheckSum(Eeprom_d data) {
 	
 	return (
 		data.min_temp
