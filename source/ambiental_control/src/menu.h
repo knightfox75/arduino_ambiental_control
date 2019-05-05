@@ -66,6 +66,9 @@ class Menu {
 		// Lectura del teclado
 		bool kb_up, kb_down, kb_fwd, kb_back;
 		void Keyboard();
+		int auto_key_delay;					// Temporizador de la autorepeticion
+		int auto_key_repeat;
+		long unsigned int held_time;		// Temporizacion de la autosuma
 		
 		// Menu principal
 		int MenuMain();
@@ -119,8 +122,6 @@ class Menu {
 		const String CURSOR_CHAR = ">";				// Caracter para el cursor
 		
 		// Variables adicionales de control
-		int auto_key_delay;
-		int auto_key_repeat;
 		int temp_value, param_value;
 		
 		// Menu principal

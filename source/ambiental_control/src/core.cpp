@@ -47,6 +47,10 @@ void Core::Start() {
 	
 	// Configura el led de actividad
 	pinMode(CORE_LED_PIN, OUTPUT);
+	
+	// Configura las entradas del sensor de nivel del tanque de agua
+	pinMode(TANK_LEVEL_EMPTY_PIN, INPUT);
+	pinMode(TANK_LEVEL_HALF_PIN, INPUT);
 		
 	// Configura el display LCD
 	ngn.lcd.Start();

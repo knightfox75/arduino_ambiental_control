@@ -121,6 +121,52 @@ const byte CHAR_GRADES[8] = {
 };
 const byte CH_GRADES = 6;
 
+const byte CHAR_TANK_FULL[8] = {
+	B00010001,
+	B00011111,
+	B00011111,
+	B00011111,
+	B00011111,
+	B00011111,
+	B00011111,
+	B00011111
+};
+
+const byte CHAR_TANK_HALF[8] = {
+	B00010001,
+	B00010001,
+	B00010001,
+	B00010001,
+	B00011111,
+	B00011111,
+	B00011111,
+	B00011111
+};
+
+const byte CHAR_TANK_EMPTY[8] = {
+	B00010001,
+	B00010001,
+	B00010001,
+	B00010001,
+	B00010001,
+	B00010001,
+	B00011011,
+	B00011111
+};
+
+const byte CHAR_TANK_ERROR[8] = {
+	B00010001,
+	B00010001,
+	B00011011,
+	B00010101,
+	B00011011,
+	B00010001,
+	B00011011,
+	B00011111
+};
+
+const byte CH_TANK = 7;
+
 
 
 /*** Metodos de entrada ***/
@@ -164,8 +210,8 @@ const int ABS_TEMP_MIN = 5;					// Temperatura
 const int ABS_TEMP_MAX = 60;
 const int ABS_HUMI_MIN = 0;					// Humedad
 const int ABS_HUMI_MAX = 100;
-const int ABS_DUTY_MIN = 1;					// Limites del ciclo de trabajo
-const int ABS_DUTY_MAX = 3600;
+const int ABS_DUTY_MIN = 1;					// Limites del ciclo de trabajo (segundos)
+const int ABS_DUTY_MAX = 7200;
 const int ABS_DATETIME_YEAR_MIN = 2018;		// Fecha y hora
 const int ABS_DATETIME_YEAR_MAX = 2199;		
 
@@ -173,7 +219,9 @@ const int ABS_DATETIME_YEAR_MAX = 2199;
 
 /*** Configuracion del control ambiental ***/
 // Configuracion de entradas
-const unsigned int DHT_PIN = 50;			// Sensor de temperatura y humedad
+const unsigned int DHT_PIN = 50;				// Sensor de temperatura y humedad
+const unsigned int TANK_LEVEL_EMPTY_PIN = 49;	// Sensor de la base del tanque
+const unsigned int TANK_LEVEL_HALF_PIN = 47;	// Sensor de medio tanque
 // Configuracion de salidas
 const unsigned int IR_LIGHT_PIN = 40;		// Pin para activar la luz IR
 const unsigned int HUMIDIFIER_PIN = 48;		// Pin para activar el humidificador

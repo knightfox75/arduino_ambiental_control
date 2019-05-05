@@ -63,6 +63,7 @@ void AmbientalControl::Start(Eeprom_d _data) {
 	// Control del sensor ambiental
 	temperature_alarm = false;
 	humidity_alarm = false;
+	water_tank_alarm = false;
 	sensor_alarm = false;
 	sensor_error_count = 0;
 	
@@ -79,6 +80,8 @@ void AmbientalControl::Start(Eeprom_d _data) {
 	humidifier_active = false;
 	humidifier_on = false;
 	humidifier_counter = 0x7FFF;
+	tank_level = TANK_LV_FULL;
+	tank_char = 0xFF;
 	
 	// Control de la luz diurna
 	sunrise_time = (data.sunrise_hour * 60) + data.sunrise_minute;
@@ -263,18 +266,43 @@ void AmbientalControl::DisplayTime() {
 /*** Muestra el estado de las salidas ***/
 void AmbientalControl::DisplayOutputState() {
 	
+	// Nivel del tanque
+	switch (tank_level) {
+		case TANK_LV_FULL:
+			if (tank_char != 0) ngn.lcd.AddChar(CH_TANK, CHAR_TANK_FULL);
+			tank_char = 0;
+			break;
+		case TANK_LV_HALF:
+			if (tank_char != 1) ngn.lcd.AddChar(CH_TANK, CHAR_TANK_HALF);
+			tank_char = 1;
+			break;
+		case TANK_LV_EMPTY:
+			if (alarm_blink) {
+				if (tank_char != 2) ngn.lcd.AddChar(CH_TANK, CHAR_TANK_EMPTY);
+				tank_char = 2;
+			} else {
+				if (tank_char != 3) ngn.lcd.AddChar(CH_TANK, CHAR_TANK_ERROR);
+				tank_char = 3;
+			}
+			break;
+	}
+	ngn.lcd.PrintChar(8, 1, CH_TANK);
+	
+	// Actividad de la lampara IR
 	if (heater_active) {
 		ngn.lcd.PrintChar(11, 1, CH_HEATER_ON);
 	} else {
 		ngn.lcd.PrintChar(11, 1, CH_OFF);
 	}
 	
+	// Actividad del aspersor
 	if (humidifier_on) {
 		ngn.lcd.PrintChar(13, 1, CH_HUMIDIFIER_ON);
 	} else {
 		ngn.lcd.PrintChar(13, 1, CH_OFF);
 	}
 	
+	// Actividad de la luz diurna
 	if (daylight_active) {
 		ngn.lcd.PrintChar(15, 1, CH_DAYLIGHT_ON);
 	} else {
@@ -352,8 +380,21 @@ void AmbientalControl::TemperatureControl() {
 /*** Control de la humedad ***/
 void AmbientalControl::HumidityControl() {
 	
-	// Si el sensor esta operativo
-	if (ngn.dht.sensor_status) {
+	// Control del nivel del tanque de agua
+	bool tank_half = digitalRead(TANK_LEVEL_HALF_PIN);
+	bool tank_empty = digitalRead(TANK_LEVEL_EMPTY_PIN);
+	water_tank_alarm = false;
+	if (tank_empty && tank_half) {
+		tank_level = TANK_LV_FULL;
+	} else if (tank_empty) {
+		tank_level = TANK_LV_HALF;
+	} else {
+		tank_level = TANK_LV_EMPTY;
+		water_tank_alarm = true;
+	}
+	
+	// Si el sensor esta operativo y el tanque de agua no esta vacio
+	if (ngn.dht.sensor_status && !water_tank_alarm) {
 	
 		if ((ngn.dht.humidity <= data.min_humi) && !humidifier_active) {
 			
@@ -400,7 +441,7 @@ void AmbientalControl::HumidityControl() {
 	
 	} else {
 		
-		// Si el sensor no esta operativo, desconectalo todo
+		// Si el sensor no esta operativo o el tanque de agua esta vacio, desconectalo todo
 		digitalWrite(HUMIDIFIER_PIN, 0);
 		humidifier_active = false;
 		humidifier_on = false;
@@ -452,7 +493,7 @@ void AmbientalControl::DayLightControl() {
 /*** Alarma ***/
 void AmbientalControl::Alarm() {
 
-	if (temperature_alarm || humidity_alarm || sensor_alarm) {
+	if (temperature_alarm || humidity_alarm || water_tank_alarm || sensor_alarm) {
 		if (!alarm_on) {
 			if (data.alarm_buzzer) tone(BUZZER_PIN, ALARM_TONE, ALARM_TONE_ON);
 			alarm_on = true;

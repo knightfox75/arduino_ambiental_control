@@ -53,6 +53,7 @@ void Menu::Start(Eeprom_d _data) {
 	auto_key_repeat = 0;
 	temp_value = 0;
 	param_value = 0;
+	held_time = 0;
 	
 	// Opciones del menu principal (MAIN)
 	main_menu_op = 0; main_menu_op_last = -1;
@@ -361,18 +362,22 @@ void Menu::Keyboard() {
 		// UP
 		kb_up = true;
 		auto_key_delay = 0;
+		held_time = 0;
 	} else if (ngn.input.KeyDown(KEY_DOWN_ID)) {
 		// DOWN
 		kb_down = true;
 		auto_key_delay = 0;
+		held_time = 0;
 	} else if (ngn.input.KeyDown(KEY_RIGHT_ID)) {
 		// FORWARD
 		kb_fwd = true;
-		auto_key_delay = 0;		
+		auto_key_delay = 0;
+		held_time = 0;
 	} else if (ngn.input.KeyDown(KEY_LEFT_ID)) {
 		// BACK
 		kb_back = true;
-		auto_key_delay = 0;	
+		auto_key_delay = 0;
+		held_time = 0;
 	} else if (ngn.input.KeyHeld(KEY_UP_ID)) {
 		// UP al mantener pulsado
 		if (auto_key_delay < AUTO_KEY_DELAY) {
@@ -385,6 +390,7 @@ void Menu::Keyboard() {
 				kb_up = true;
 			}
 		}
+		held_time ++;
 	} else if (ngn.input.KeyHeld(KEY_DOWN_ID)) {
 		// DOWN al mantener pulsado
 		if (auto_key_delay < AUTO_KEY_DELAY) {
@@ -397,8 +403,10 @@ void Menu::Keyboard() {
 				kb_down = true;
 			}
 		}
+		held_time ++;
 	} else {
 		auto_key_delay = 0;
+		held_time = 0;
 	}
 	
 }
@@ -582,18 +590,32 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 	
 	// Variables de control
 	bool update = false;
+	int held = 0;
+	
+	// Control de autosuma
+	int add = 0;
+	if (held_time >= 200) {
+		add = 50;
+		held_time = 200;
+	} else if (held_time >= 100) {
+		add = 10;
+	} else {
+		add = 1;
+	}
 	
 	// Control por teclado
 	if (kb_up) {
 		// Suma
-		temp_value ++;
+		temp_value += add;
 		if (temp_value > max_val) temp_value = max_val;
 		update = true;
+		held = 1;
 	} else if (kb_down) {
 		// Resta
-		temp_value --;
+		temp_value -= add;
 		if (temp_value < min_val) temp_value = min_val;
 		update = true;
+		held = 2;
 	} else if (kb_fwd) {
 		// Acepta
 		value = temp_value;
@@ -602,7 +624,7 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 		// Descarta
 		r = 0;
 	}
-	
+		
 	// Actualiza el marcador
 	if (update) {
 		byte x = (15 - width);
@@ -618,7 +640,7 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 			case UNIT_SECONDS:
 				ngn.lcd.Print(15, 1, "s");
 				break;
-		}
+		}		
 	}
 	
 	// Devuelve el resultado

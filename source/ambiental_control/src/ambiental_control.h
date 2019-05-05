@@ -85,6 +85,7 @@ class AmbientalControl {
 		void AmbientalSensorControl();
 		bool temperature_alarm;
 		bool humidity_alarm;
+		bool water_tank_alarm;
 		bool sensor_alarm;
 		long int sensor_error_count;
 		
@@ -101,6 +102,11 @@ class AmbientalControl {
 		bool humidifier_active;
 		bool humidifier_on;
 		unsigned int humidifier_counter;
+		byte tank_level;
+		static const unsigned int TANK_LV_EMPTY = 0;
+		static const unsigned int TANK_LV_HALF = 1;
+		static const unsigned int TANK_LV_FULL = 2;
+		byte tank_char;
 		
 		// Control horario, salida y puesta del sol
 		void DayLightControl();
