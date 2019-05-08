@@ -29,7 +29,8 @@
 // Arduino
 #include <Arduino.h>
 // N'gine
-#include "ngn_settings.h"
+#include "ngn_defines.h"		// Definiciones propietarias
+#include "ngn_settings.h"		// Parametros de la configuracion
 
 
 
@@ -56,26 +57,26 @@ class NGN_Input {
 		~NGN_Input();
 		
 		// Metodos de configuracion
-		void Start(unsigned int number_of_keys);					// Inicia la libreria
-		void KeyAssign(unsigned int key_slot, unsigned int pin);	// Registra una tecla
+		void Start(U8 number_of_keys);					// Inicia la libreria
+		void KeyAssign(U8 key_slot, U8 pin);			// Registra una tecla
 		
 		// Metodos de lectura
 		void Read();						// Lee el estado de las teclas
-		bool KeyHeld(unsigned int id);		// Devuelve el estado HELD
-		bool KeyDown(unsigned int id);		// Devuelve el estado DOWN
-		bool KeyUp(unsigned int id);		// Devuelve el estado UP
+		bool KeyHeld(U8 id);		// Devuelve el estado HELD
+		bool KeyDown(U8 id);		// Devuelve el estado DOWN
+		bool KeyUp(U8 id);			// Devuelve el estado UP
 	
 	private:
 	
-		const static int _PIN = 0;
-		const static int _HELD = 1;
-		const static int _UP = 2;
-		const static int _DOWN = 3;
-		const static int _LAST = 4;
-		const static int SIZE_OF_KEY = 5;		// Area de memoria de cada tecla
+		const static U8 _PIN = 0;
+		const static U8 _HELD = 1;
+		const static U8 _UP = 2;
+		const static U8 _DOWN = 3;
+		const static U8 _LAST = 4;
+		const static U8 SIZE_OF_KEY = 5;		// Area de memoria de cada tecla
 		
-		byte* key;					// Puntero a las teclas
-		unsigned int key_num;		// Numero de teclas
+		U8* key;					// Puntero a las teclas
+		U8 key_num;					// Numero de teclas
 	
 };
 

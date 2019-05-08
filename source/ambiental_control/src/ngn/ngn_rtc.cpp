@@ -49,8 +49,8 @@ void NGN_Rtc::Start() {
 	month = 0;
 	day = 0;
 	
-	// Inicia el modulo RTC
-	clock.begin();
+	// Inicia el interfaz I2C 
+	Wire.begin();
 	
 	// Fecha y horas iniciales con el tiempo de compilacion
 	//clock.setDateTime(__DATE__, __TIME__);
@@ -66,14 +66,14 @@ void NGN_Rtc::Start() {
 void NGN_Rtc::Read() {
 	
 	// Lee los datos en RAW
-	dt = clock.getDateTime();
+	dt = clock.now();
 	
 	// Asigna los valores
-	second = dt.second;
-	minute = dt.minute;
-	hour = dt.hour;
-	day = dt.day;
-	month = dt.month;
-	year = dt.year;
+	second = (S8)dt.second();
+	minute = (S8)dt.minute();
+	hour = (S8)dt.hour();
+	day = (S8)dt.day();
+	month = (S8)dt.month();
+	year = (S16)dt.year();
 	
 }

@@ -30,7 +30,8 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>			// Display LCD
 // N'gine
-#include "ngn_settings.h"			// Parametros de la configuracion
+#include "ngn_defines.h"		// Definiciones propietarias
+#include "ngn_settings.h"		// Parametros de la configuracion
 
 
 
@@ -63,15 +64,15 @@ class NGN_Lcd {
 		
 		// Imprime un texto
 		void Print(String txt);
-		void Print(unsigned int x, unsigned int y, String txt);
-		void PrintChar(unsigned int x, unsigned int y, byte b);
+		void Print(U8 x, U8 y, String txt);
+		void PrintChar(U8 x, U8 y, U8 b);
 		
 		// Borra la pantalla
 		void Cls();
-		void Cls(unsigned int x, unsigned int y, unsigned int length);
+		void Cls(U8 x, U8 y, U8 length);
 		
 		// Añade un caracter personalizado
-		void AddChar(int id, byte character[]);
+		void AddChar(U8 id, const U8* character);
 
 		
 	private:

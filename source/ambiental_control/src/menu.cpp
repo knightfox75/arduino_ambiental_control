@@ -67,10 +67,10 @@ void Menu::Start(Eeprom_d _data) {
 
 
 /*** Ejecuta el programa ***/
-int Menu::Run() {
+S16 Menu::Run() {
 	
 	// Resultado
-	int r = -1;
+	S16 r = -1;
 	
 	// Lee el teclado
 	Keyboard();
@@ -414,10 +414,10 @@ void Menu::Keyboard() {
 
 
 /*** Menu principal ***/
-int Menu::MenuMain() {
+S16 Menu::MenuMain() {
 	
 	// Resultado
-	int r = -1;
+	S16 r = -1;
 	
 	// Dibujado inicial?
 	if (main_menu_op_last < 0) {
@@ -459,13 +459,13 @@ int Menu::MenuMain() {
 
 
 /*** Menu de configuracion de la temperatura ***/
-int Menu::MenuTemperature() {
+S16 Menu::MenuTemperature() {
 	
 	// Resultado
-	int r = -1;
+	S16 r = -1;
 	
 	// Array con los datos actuales
-	int dt[TEMPERATURE_MENU_OPTIONS] = {
+	S8 dt[TEMPERATURE_MENU_OPTIONS] = {
 		data.min_temp,
 		data.max_temp,
 		data.min_temp_alarm,
@@ -514,17 +514,17 @@ int Menu::MenuTemperature() {
 
 
 /*** Menu de configuracion de la humedad ***/
-int Menu::MenuHumidity() {
+S16 Menu::MenuHumidity() {
 	
 	// Resultado
-	int r = -1;
+	S16 r = -1;
 	
 	// Array con los datos actuales
-	int dt[HUMIDITY_MENU_OPTIONS][2] = {
-		{data.min_humi, 0},
-		{data.max_humi, 0},
-		{data.min_humi_alarm, 0},
-		{data.max_humi_alarm, 0},
+	S32 dt[HUMIDITY_MENU_OPTIONS][2] = {
+		{(S32)data.min_humi, 0},
+		{(S32)data.max_humi, 0},
+		{(S32)data.min_humi_alarm, 0},
+		{(S32)data.max_humi_alarm, 0},
 		{data.humi_duty_cycle_on, 1},
 		{data.humi_duty_cycle_off, 1}
 	};
@@ -555,8 +555,8 @@ int Menu::MenuHumidity() {
 	// Si ha canviado la opcion, cambia el texto
 	if (humidity_menu_op_last != humidity_menu_op) {
 		String symbol = "";
-		int value = 0;
-		byte width = 0;
+		S16 value = 0;
+		U8 width = 0;
 		if (dt[humidity_menu_op][1] == 0) {
 			value = dt[humidity_menu_op][0];
 			symbol = "%";
@@ -583,20 +583,21 @@ int Menu::MenuHumidity() {
 
 
 /*** Cambia el valor de un parametro ***/
-int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) {
+S16 Menu::SetValue(S16 &value, S16 min_val, S16 max_val, U8 unit, U8 width) {
 	
 	// Resultado
-	int r = -1;
+	S16 r = -1;
 	
 	// Variables de control
 	bool update = false;
-	int held = 0;
 	
 	// Control de autosuma
-	int add = 0;
+	U8 add = 0;
 	if (held_time >= 200) {
-		add = 50;
+		add = 75;
 		held_time = 200;
+	} else if (held_time >= 150) {
+		add = 25;
 	} else if (held_time >= 100) {
 		add = 10;
 	} else {
@@ -609,13 +610,11 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 		temp_value += add;
 		if (temp_value > max_val) temp_value = max_val;
 		update = true;
-		held = 1;
 	} else if (kb_down) {
 		// Resta
 		temp_value -= add;
 		if (temp_value < min_val) temp_value = min_val;
 		update = true;
-		held = 2;
 	} else if (kb_fwd) {
 		// Acepta
 		value = temp_value;
@@ -627,7 +626,7 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 		
 	// Actualiza el marcador
 	if (update) {
-		byte x = (15 - width);
+		U8 x = (15 - width);
 		ngn.lcd.Cls(x, 1, width);
 		ngn.lcd.Print(x, 1, ngn.string.Int2String(temp_value, width));
 		switch (unit) {
@@ -652,7 +651,7 @@ int Menu::SetValue(int &value, int min_val, int max_val, byte unit, byte width) 
 
 
 /*** Convierte de tics a segundos ***/
-unsigned int Menu::Ticks2Seconds(unsigned long int ticks) {
+U16 Menu::Ticks2Seconds(U32 ticks) {
 		
 	return ((ticks * TICK) / BASE);
 	
@@ -661,7 +660,7 @@ unsigned int Menu::Ticks2Seconds(unsigned long int ticks) {
 
 
 /*** Convierte de segundos a tics ***/
-unsigned long int Menu::Seconds2Ticks(unsigned int seconds) {
+U32 Menu::Seconds2Ticks(U16 seconds) {
 	
 	return ((seconds * BASE) / TICK);
 	

@@ -68,14 +68,14 @@ class AmbientalControl {
 		void DisplayAmbientalData();
 		bool ambiental_text_data;
 		bool ambiental_text_error;
-		int _temperature;
-		int _humidity;
+		S8 _temperature;
+		S8 _humidity;
 		
 		// Muestra la fecha y la hora
 		void DisplayTime();
-		int _hour;
-		int _minute;
-		int _second;
+		S8 _hour;
+		S8 _minute;
+		S8 _second;
 		bool dot2;
 		
 		// Muestra los datos de las salidas
@@ -87,7 +87,7 @@ class AmbientalControl {
 		bool humidity_alarm;
 		bool water_tank_alarm;
 		bool sensor_alarm;
-		long int sensor_error_count;
+		U16 sensor_error_count;
 		
 		// Control de la temperatura
 		void TemperatureControl();
@@ -101,25 +101,25 @@ class AmbientalControl {
 		bool humi_too_low;
 		bool humidifier_active;
 		bool humidifier_on;
-		unsigned int humidifier_counter;
-		byte tank_level;
-		static const unsigned int TANK_LV_EMPTY = 0;
-		static const unsigned int TANK_LV_HALF = 1;
-		static const unsigned int TANK_LV_FULL = 2;
-		byte tank_char;
+		U16 humidifier_counter;
+		U8 tank_level;
+		static const U8 TANK_LV_EMPTY = 0;
+		static const U8 TANK_LV_HALF = 1;
+		static const U8 TANK_LV_FULL = 2;
+		U8 tank_char;
 		
 		// Control horario, salida y puesta del sol
 		void DayLightControl();
-		int sunrise_time;
-		int sunset_time;
+		U16 sunrise_time;
+		U16 sunset_time;
 		bool daylight_active;
 		
 		// Alarmas
 		void Alarm();
 		bool alarm_on;
-		int alarm_repeat_count;
+		U16 alarm_repeat_count;
 		bool alarm_blink;
-		int alarm_blink_count;
+		U16 alarm_blink_count;
 	
 };
 

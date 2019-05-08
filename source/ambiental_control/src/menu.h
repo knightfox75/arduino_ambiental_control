@@ -51,7 +51,7 @@ class Menu {
 		void Start(Eeprom_d _data);
 		
 		// Ejecucion
-		int Run();
+		S16 Run();
 		
 		// Opten los datos actualizados desde el menu
 		Eeprom_d GetData();
@@ -66,67 +66,67 @@ class Menu {
 		// Lectura del teclado
 		bool kb_up, kb_down, kb_fwd, kb_back;
 		void Keyboard();
-		int auto_key_delay;					// Temporizador de la autorepeticion
-		int auto_key_repeat;
-		long unsigned int held_time;		// Temporizacion de la autosuma
+		U16 auto_key_delay;					// Temporizador de la autorepeticion
+		U16 auto_key_repeat;
+		U16 held_time;						// Temporizacion de la autosuma
 		
 		// Menu principal
-		int MenuMain();
+		S16 MenuMain();
 		
 		// Menu de temperatura
-		int MenuTemperature();
+		S16 MenuTemperature();
 		// Menu de humedad
-		int MenuHumidity();
+		S16 MenuHumidity();
 		// Menu de la lampara de luz diurna
-		int MenuSunLight();
+		S16 MenuSunLight();
 		// Menu de configuracion de fecha y hora
-		int MenuDateTime();
+		S16 MenuDateTime();
 		// Menu de configuracion del sistema
-		int MenuSystem();
+		S16 MenuSystem();
 		
 		// Cambia el valor de un parametro
-		int SetValue(int &value, int min_val, int max_val, byte unit, byte width);
-		static const byte UNIT_GRADES = 1;
-		static const byte UNIT_PERCENT = 2;
-		static const byte UNIT_SECONDS = 3;
+		S16 SetValue(S16 &value, S16 min_val, S16 max_val, U8 unit, U8 width);
+		static const U8 UNIT_GRADES = 1;
+		static const U8 UNIT_PERCENT = 2;
+		static const U8 UNIT_SECONDS = 3;
 		
 		// Maquina de estados
-		int st, next_st;								// Control del menu
+		S16 st, next_st;								// Control del menu
 		
 		// Opciones del menu principal
-		static const int MENU_ST_MAIN = 1;				// Menu principal
-		static const int MENU_ST_TEMPERATURE = 2;		// Submenus
-		static const int MENU_ST_HUMIDITY = 3;
-		static const int MENU_ST_SUNLIGHT = 4;
-		static const int MENU_ST_DATETIME = 5;
-		static const int MENU_ST_SYSTEM = 6;
+		static const S16 MENU_ST_MAIN = 1;				// Menu principal
+		static const S16 MENU_ST_TEMPERATURE = 2;		// Submenus
+		static const S16 MENU_ST_HUMIDITY = 3;
+		static const S16 MENU_ST_SUNLIGHT = 4;
+		static const S16 MENU_ST_DATETIME = 5;
+		static const S16 MENU_ST_SYSTEM = 6;
 		
 		// Opciones de el menu "Temperatura"
-		static const int TEMPERATURE_ST_MIN = 101;
-		static const int TEMPERATURE_ST_MAX = 102;
-		static const int TEMPERATURE_ST_LOWALARM = 103;
-		static const int TEMPERATURE_ST_HIALARM = 104;
+		static const S16 TEMPERATURE_ST_MIN = 101;
+		static const S16 TEMPERATURE_ST_MAX = 102;
+		static const S16 TEMPERATURE_ST_LOWALARM = 103;
+		static const S16 TEMPERATURE_ST_HIALARM = 104;
 		
 		// Opciones de el menu "Humedad"
-		static const int HUMIDITY_ST_MIN = 201;
-		static const int HUMIDITY_ST_MAX = 202;
-		static const int HUMIDITY_ST_LOWALARM = 203;
-		static const int HUMIDITY_ST_HIALARM = 204;
-		static const int HUMIDITY_ST_ONTIME = 205;
-		static const int HUMIDITY_ST_OFFTIME = 206;
+		static const S16 HUMIDITY_ST_MIN = 201;
+		static const S16 HUMIDITY_ST_MAX = 202;
+		static const S16 HUMIDITY_ST_LOWALARM = 203;
+		static const S16 HUMIDITY_ST_HIALARM = 204;
+		static const S16 HUMIDITY_ST_ONTIME = 205;
+		static const S16 HUMIDITY_ST_OFFTIME = 206;
 		
 		// Parametros comunes a todos los menus
-		static const int MENU_OP_EXIT = 0x7FFF;
-		const int AUTO_KEY_DELAY = 20;				// 20 ticks, 1s
-		const int AUTO_KEY_REPEAT = 2;				// 2 ticks, 0.1s
+		static const S16 MENU_OP_EXIT = 0x7FFF;
+		const U16 AUTO_KEY_DELAY = 20;				// 20 ticks, 1s
+		const U16 AUTO_KEY_REPEAT = 2;				// 2 ticks, 0.1s
 		const String CURSOR_CHAR = ">";				// Caracter para el cursor
 		
 		// Variables adicionales de control
-		int temp_value, param_value;
+		S16 temp_value, param_value;
 		
 		// Menu principal
-		int main_menu_op, main_menu_op_last;				// Control de opciones
-		static const int MAIN_MENU_OPTIONS = 5;				// Numero de opciones
+		S16 main_menu_op, main_menu_op_last;				// Control de opciones
+		static const S16 MAIN_MENU_OPTIONS = 5;				// Numero de opciones
 		const String main_menu_text[MAIN_MENU_OPTIONS] = {
 			"Temperature",
 			"Humidity",
@@ -134,30 +134,30 @@ class Menu {
 			"Date & Time",
 			"System"
 		};
-		static const int MAIN_MENU_OP_TEMPERATURE = 0;
-		static const int MAIN_MENU_OP_HUMIDITY = 1;
-		static const int MAIN_MENU_OP_SUNLIGHT = 2;
-		static const int MAIN_MENU_OP_DATETIME = 3;
-		static const int MAIN_MENU_OP_SYSTEM = 4;
+		static const S16 MAIN_MENU_OP_TEMPERATURE = 0;
+		static const S16 MAIN_MENU_OP_HUMIDITY = 1;
+		static const S16 MAIN_MENU_OP_SUNLIGHT = 2;
+		static const S16 MAIN_MENU_OP_DATETIME = 3;
+		static const S16 MAIN_MENU_OP_SYSTEM = 4;
 		
 		
 		// Menu de configuracion de la temperatura
-		int temperature_menu_op, temperature_menu_op_last;		// Control de opciones
-		static const int TEMPERATURE_MENU_OPTIONS = 4;
+		S16 temperature_menu_op, temperature_menu_op_last;		// Control de opciones
+		static const S16 TEMPERATURE_MENU_OPTIONS = 4;
 		const String temperature_menu_text[TEMPERATURE_MENU_OPTIONS] = {
 			"Min",
 			"Max",
 			"Low Alarm",
 			"Hi Alarm"
 		};
-		static const int TEMPERATURE_MENU_OP_MIN = 0;
-		static const int TEMPERATURE_MENU_OP_MAX = 1;
-		static const int TEMPERATURE_MENU_OP_LOWALARM = 2;
-		static const int TEMPERATURE_MENU_OP_HIALARM = 3;
+		static const S16 TEMPERATURE_MENU_OP_MIN = 0;
+		static const S16 TEMPERATURE_MENU_OP_MAX = 1;
+		static const S16 TEMPERATURE_MENU_OP_LOWALARM = 2;
+		static const S16 TEMPERATURE_MENU_OP_HIALARM = 3;
 		
 		// Menu de configuracion de la humedad relativa
-		int humidity_menu_op, humidity_menu_op_last;		// Control de opciones
-		static const int HUMIDITY_MENU_OPTIONS = 6;
+		S16 humidity_menu_op, humidity_menu_op_last;		// Control de opciones
+		static const S16 HUMIDITY_MENU_OPTIONS = 6;
 		const String humidity_menu_text[HUMIDITY_MENU_OPTIONS] = {
 			"Min",
 			"Max",
@@ -166,19 +166,19 @@ class Menu {
 			"ON Time",
 			"OFF Time"
 		};
-		static const int HUMIDITY_MENU_OP_MIN = 0;
-		static const int HUMIDITY_MENU_OP_MAX = 1;
-		static const int HUMIDITY_MENU_OP_LOWALARM = 2;
-		static const int HUMIDITY_MENU_OP_HIALARM = 3;
-		static const int HUMIDITY_MENU_OP_ONTIME = 4;
-		static const int HUMIDITY_MENU_OP_OFFTIME = 5;
+		static const S16 HUMIDITY_MENU_OP_MIN = 0;
+		static const S16 HUMIDITY_MENU_OP_MAX = 1;
+		static const S16 HUMIDITY_MENU_OP_LOWALARM = 2;
+		static const S16 HUMIDITY_MENU_OP_HIALARM = 3;
+		static const S16 HUMIDITY_MENU_OP_ONTIME = 4;
+		static const S16 HUMIDITY_MENU_OP_OFFTIME = 5;
 		
 		
 		// Convierte Tics a Segundos y viceversa
-		const unsigned int BASE = (1000 / CORE_FREQ_DIVIDER);
-		const unsigned int TICK = CORE_MAIN_UPDATE_FREQ;
-		unsigned int Ticks2Seconds(unsigned long int ticks);
-		unsigned long int Seconds2Ticks(unsigned int seconds);
+		const U16 BASE = (1000 / CORE_FREQ_DIVIDER);
+		const U16 TICK = CORE_MAIN_UPDATE_FREQ;
+		U16 Ticks2Seconds(U32 ticks);
+		U32 Seconds2Ticks(U16 seconds);
 		
 					
 };

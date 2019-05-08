@@ -71,7 +71,7 @@ class EepromData {
 		void EraseEeprom();
 		
 		// Checksum
-		unsigned long int CheckSum(Eeprom_d data);
+		U32 CheckSum(Eeprom_d data);
 	
 };
 

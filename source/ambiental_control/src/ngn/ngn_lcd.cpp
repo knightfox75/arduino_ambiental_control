@@ -61,7 +61,7 @@ void NGN_Lcd::Print(String txt) {
 
 
 /*** Imprime un texto ***/
-void NGN_Lcd::Print(unsigned int x, unsigned int y, String txt) {
+void NGN_Lcd::Print(U8 x, U8 y, String txt) {
 	
 	display.setCursor(x, y);
 	display.print(txt);
@@ -70,7 +70,7 @@ void NGN_Lcd::Print(unsigned int x, unsigned int y, String txt) {
 
 
 /*** Imprime un caracter especial ***/
-void NGN_Lcd::PrintChar(unsigned int x, unsigned int y, byte b) {
+void NGN_Lcd::PrintChar(U8 x, U8 y, U8 b) {
 	
 	display.setCursor(x, y);
 	display.write(byte(b));
@@ -89,11 +89,11 @@ void NGN_Lcd::Cls() {
 
 
 /*** Borra una parte de la pantalla ***/
-void NGN_Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
+void NGN_Lcd::Cls(U8 x, U8 y, U8 length) {
 	
 	String txt = "";
 	
-	for (unsigned int i = x; i < (x + length); i ++) txt += " ";
+	for (U8 i = x; i < (x + length); i ++) txt += " ";
 	Print(x, y, txt);
 	
 }
@@ -101,8 +101,8 @@ void NGN_Lcd::Cls(unsigned int x, unsigned int y, unsigned int length) {
 
 
 /*** Añade un caracter personalizado ***/
-void NGN_Lcd::AddChar(int id, byte character[]) {
+void NGN_Lcd::AddChar(U8 id, const U8* character) {
 	
-	display.createChar(id, character);
+	display.createChar(id, (U8*)character);
 	
 }

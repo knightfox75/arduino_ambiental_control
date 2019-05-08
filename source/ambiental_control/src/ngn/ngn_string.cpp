@@ -39,7 +39,7 @@ NGN_String::~NGN_String() {
 
 
 /*** Convierte un numero entero a cadena de texto (primera sobrecarga) ***/
-String NGN_String::Int2String(int number) {
+String NGN_String::Int2String(S32 number) {
 	
 	return String(number);
 	
@@ -48,15 +48,15 @@ String NGN_String::Int2String(int number) {
 
 
 /*** Convierte un numero entero a cadena de texto (segunda sobrecarga) ***/
-String NGN_String::Int2String(int number, int min_width) {
+String NGN_String::Int2String(S32 number, U8 min_width) {
 	
 	// Si se ha especificado solo 1 digito, conversion directa
 	if (min_width <= 1) return String(number);
 	
 	// Variables de control
 	String text = "";
-	int digits = min_width;
-	int value = 0;
+	U8 digits = min_width;
+	S32 value = 0;
 	
 	// Si se trata de un numero negativo...
 	if (number < 0) {
@@ -68,7 +68,7 @@ String NGN_String::Int2String(int number, int min_width) {
 	}
 	
 	// Añade el numero de ceros necesarios
-	for (int i = 1; i < digits; i ++) {
+	for (U8 i = 1; i < digits; i ++) {
 		if (value < pow(10, i)) text += "0";
 	}
 	

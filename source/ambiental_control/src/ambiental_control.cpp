@@ -45,7 +45,7 @@ void AmbientalControl::Start(Eeprom_d _data) {
 	data = _data;
 	
 	// Configura el sensor DHT
-	ngn.dht.Start(DHT_PIN);
+	ngn.dht.Start();
 	
 	// Configura el RTC
 	ngn.rtc.Start();
@@ -173,7 +173,7 @@ void AmbientalControl::DisplayAmbientalData() {
 			ngn.lcd.PrintChar(5, 0, CH_GRADES);
 			
 			text = "H:" + ngn.string.Int2String(ngn.dht.humidity, 3) + "%";
-			ngn.lcd.Print(8, 0, text);
+			ngn.lcd.Print(9, 0, text);
 			
 			ambiental_text_data = true;
 			ambiental_text_error = false;
@@ -201,21 +201,21 @@ void AmbientalControl::DisplayAmbientalData() {
 			
 			// Actualiza la humedad
 			if (_humidity != ngn.dht.humidity) {
-				ngn.lcd.Cls(10, 0, 3);
+				ngn.lcd.Cls(11, 0, 3);
 				text = ngn.string.Int2String(ngn.dht.humidity, 3);
-				ngn.lcd.Print(10, 0, text);
+				ngn.lcd.Print(11, 0, text);
 				_humidity = ngn.dht.humidity;
 			}
 			
 			// Alarma de humedad
 			if (alarm_blink && (humi_too_low || humi_too_high)) {
 				if (humi_too_low) {
-					ngn.lcd.PrintChar(14, 0, CH_ARROW_DOWN);
+					ngn.lcd.PrintChar(15, 0, CH_ARROW_DOWN);
 				} else if (humi_too_high) {
-					ngn.lcd.PrintChar(14, 0, CH_ARROW_UP);
+					ngn.lcd.PrintChar(15, 0, CH_ARROW_UP);
 				}
 			} else {
-				ngn.lcd.Print(14, 0, " ");
+				ngn.lcd.Print(15, 0, " ");
 			}
 			
 		}
@@ -286,7 +286,7 @@ void AmbientalControl::DisplayOutputState() {
 			}
 			break;
 	}
-	ngn.lcd.PrintChar(8, 1, CH_TANK);
+	ngn.lcd.PrintChar(9, 1, CH_TANK);
 	
 	// Actividad de la lampara IR
 	if (heater_active) {
@@ -460,10 +460,10 @@ void AmbientalControl::HumidityControl() {
 void AmbientalControl::DayLightControl() {
 	
 	// Calcula el global de tiempo
-	int current_time = (ngn.rtc.hour * 60) + ngn.rtc.minute;
+	U16 current_time = (ngn.rtc.hour * 60) + ngn.rtc.minute;
 	
 	// Ajuste para arcos temporales con cambio de dia
-	int start_time = 0, end_time = 0;
+	U16 start_time = 0, end_time = 0;
 	bool on = false, off = false;
 	if (sunset_time >= sunrise_time) {	
 		start_time = sunrise_time;

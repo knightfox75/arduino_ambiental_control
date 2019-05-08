@@ -15,6 +15,10 @@
 	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Sensor DHT
+	
+	*** Se requieren las siguientes librerias ***
+	DHT Sensor Library: https://github.com/adafruit/DHT-sensor-library
+	Adafruit Unified Sensor Lib: https://github.com/adafruit/Adafruit_Sensor
 
 *******************************************************************************/
 
@@ -27,10 +31,7 @@
 
 
 /*** Constructor ***/
-NGN_Dht::NGN_Dht() {
-	
-	pin_id = 0;
-	
+NGN_Dht::NGN_Dht() {	
 }
 
 
@@ -42,18 +43,18 @@ NGN_Dht::~NGN_Dht() {
 
 
 /*** Inicia el sensor ***/
-void NGN_Dht::Start(unsigned int pin) {
+void NGN_Dht::Start() {
 	
 	temperature = 0;
 	humidity = 0;
 	
 	_update = false;
 	
-	pin_id = pin;
-	pinMode(pin_id, INPUT);
+	dht.begin();
+
+	delay((DHT_UPDATE_FREQ * DHT_FREQ_DIVIDER));
 	
 	sensor_status = Update();
-	delay((DHT_UPDATE_FREQ * 10));
 	
 }
 
@@ -63,7 +64,7 @@ void NGN_Dht::Start(unsigned int pin) {
 bool NGN_Dht::Read() {
 	
 	// Si no se ha alcanzado el tiempo de refresco, sal
-	if ((((long int)(millis() / DHT_FREQ_DIVIDER)) % DHT_UPDATE_FREQ) != 0) {
+	if ((((U32)(millis() / DHT_FREQ_DIVIDER)) % DHT_UPDATE_FREQ) != 0) {
 		_update = false;
 		return sensor_status;
 	}
@@ -85,23 +86,34 @@ bool NGN_Dht::Read() {
 /*** Actualiza el estado del sensor ***/
 bool NGN_Dht::Update() {
 	
-	// Variables para la lectura de datos
-	byte temp = 0, humi = 0, data[40] = {0};
+	// Variables
+	bool r = true;
 	
-	// Lee la informacion del sensor
-	if (dht.read(pin_id, &temp, &humi, data)) {
-		
+	// Lee la temperatura
+	float temp = dht.readTemperature();
+	// Si hay error de temperatura
+	if (isnan(temp)) {
+		// Informa del error
 		temperature = 0;
-		humidity = 0;
-		return false;
-		
+		r = false;
 	} else {
-		
-		temperature = (int)temp;
-		humidity = (int)humi;
-		
+		// Lee los datos
+		temperature = (S8)temp;
 	}
 	
-	return true;
+	// Lee la humedad relativa
+	float humi = dht.readHumidity();
+	// Si hay error de temperatura
+	if (isnan(humi)) {
+		// Informa del error
+		humidity = 0;
+		r = false;
+	} else {
+		// Lee los datos
+		humidity = (S8)humi;
+	}
+	
+	// Devuelve el resultado
+	return r;
 	
 }

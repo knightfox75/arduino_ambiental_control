@@ -53,7 +53,7 @@ NGN_Input::~NGN_Input() {
 
 
 /*** Inicia la clase ***/
-void NGN_Input::Start(unsigned int number_of_keys) {
+void NGN_Input::Start(U8 number_of_keys) {
 	
 	// Si el numero de teclas es menor a 1, sal
 	if ((number_of_keys < 1) || (number_of_keys >= INPUT_MAX_KEY_SLOTS)) return;
@@ -64,15 +64,15 @@ void NGN_Input::Start(unsigned int number_of_keys) {
 	}
 	
 	// Asigna el espacio
-	key = (byte*)calloc(number_of_keys, (sizeof(byte) * SIZE_OF_KEY));
+	key = (U8*)calloc(number_of_keys, (sizeof(U8) * SIZE_OF_KEY));
 	if (!key) return;
 	
 	// Guarda el numero de teclas creadas
 	key_num = number_of_keys;
 	
 	// Inicia el espacio de memoria
-	for (unsigned int i = 0; i < key_num; i ++) {
-		int p = (i * SIZE_OF_KEY);
+	for (U8 i = 0; i < key_num; i ++) {
+		U16 p = (i * SIZE_OF_KEY);
 		key[(p + _PIN)] = 0xFF;
 		key[(p + _HELD)] = 0x00;
 		key[(p + _UP)] = 0x00;
@@ -86,7 +86,7 @@ void NGN_Input::Start(unsigned int number_of_keys) {
 
 
 /*** Registra una tecla ***/
-void NGN_Input::KeyAssign(unsigned int key_slot, unsigned int pin) {
+void NGN_Input::KeyAssign(U8 key_slot, U8 pin) {
 	
 	// Proteccion de desborde
 	if (key_slot >= key_num) return;
@@ -105,10 +105,10 @@ void NGN_Input::KeyAssign(unsigned int key_slot, unsigned int pin) {
 /*** Actualiza el estado de las teclas ***/
 void NGN_Input::Read() {
 	
-	unsigned int p = 0;
+	U16 p = 0;
 	
 	// Lee todas las teclas
-	for (unsigned int i = 0; i < key_num; i ++) {
+	for (U8 i = 0; i < key_num; i ++) {
 		
 		// Calcula el puntero de memoria
 		p = (i * SIZE_OF_KEY);
@@ -139,7 +139,7 @@ void NGN_Input::Read() {
 
 
 /*** Estado HELD de la tecla ***/
-bool NGN_Input::KeyHeld(unsigned int id) {
+bool NGN_Input::KeyHeld(U8 id) {
 	
 	if (id >= key_num) return false;
 	
@@ -150,7 +150,7 @@ bool NGN_Input::KeyHeld(unsigned int id) {
 
 
 /*** Estado DOWN de la tecla ***/
-bool NGN_Input::KeyDown(unsigned int id) {
+bool NGN_Input::KeyDown(U8 id) {
 	
 	if (id >= key_num) return false;
 	
@@ -161,7 +161,7 @@ bool NGN_Input::KeyDown(unsigned int id) {
 
 
 /*** Estado UP de la tecla ***/
-bool NGN_Input::KeyUp(unsigned int id) {
+bool NGN_Input::KeyUp(U8 id) {
 	
 	if (id >= key_num) return false;
 	

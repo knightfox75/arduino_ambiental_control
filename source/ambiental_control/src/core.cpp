@@ -93,7 +93,7 @@ void Core::Start() {
 void Core::Run() {
 	
 	// Si no se ha alcanzado el tiempo de refresco, sal
-	if ((((long int)(millis() / CORE_FREQ_DIVIDER)) % CORE_MAIN_UPDATE_FREQ) != 0) {
+	if ((((U32)(millis() / CORE_FREQ_DIVIDER)) % CORE_MAIN_UPDATE_FREQ) != 0) {
 		_update = false;
 		return;
 	}

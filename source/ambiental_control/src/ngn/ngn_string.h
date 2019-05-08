@@ -28,6 +28,9 @@
 /*** Includes ***/
 // Arduino
 #include <Arduino.h>
+// N'gine
+#include "ngn_defines.h"		// Definiciones propietarias
+#include "ngn_settings.h"		// Parametros de la configuracion
 
 
 
@@ -43,8 +46,8 @@ class NGN_String {
 		~NGN_String();
 		
 		// Convierte un numero Entero a String
-		String Int2String(int number);
-		String Int2String(int number, int min_width);
+		String Int2String(S32 number);
+		String Int2String(S32 number, U8 min_width);
 
 		
 	

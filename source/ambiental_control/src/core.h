@@ -58,11 +58,11 @@ class Core {
 	private:
 	
 		// Maquina de estados
-		int st, next_st;
-		const static int ST_START_AMBIENTAL = 0;
-		const static int ST_RUN_AMBIENTAL = 1;
-		const static int ST_START_MENU = 2;
-		const static int ST_RUN_MENU = 3;
+		U8 st, next_st;
+		const static U8 ST_START_AMBIENTAL = 0;
+		const static U8 ST_RUN_AMBIENTAL = 1;
+		const static U8 ST_START_MENU = 2;
+		const static U8 ST_RUN_MENU = 3;
 	
 		// Variables de control
 		bool _led_blink;			// Control del blink del led

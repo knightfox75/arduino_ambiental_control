@@ -15,6 +15,9 @@
 	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Real Time Clock
+	
+	*** Se requieren las siguientes librerias ***
+	DS3231 real-time clock (RTC) : https://github.com/NorthernWidget/DS3231 
 
 *******************************************************************************/
 
@@ -28,8 +31,12 @@
 /*** Includes ***/
 // Arduino
 #include <Arduino.h>
-// Modulos
-#include "libs/DS3231.h"
+#include <Wire.h>
+// Arduino Libs
+#include <DS3231.h>
+// N'gine
+#include "ngn_defines.h"		// Definiciones propietarias
+#include "ngn_settings.h"		// Parametros de la configuracion
 
 
 
@@ -49,20 +56,21 @@ class NGN_Rtc {
 		void Read();		// Lee la fecha y hora actuales
 		
 		// Propiedades
-		int hour;			// Hora
-		int minute;
-		int second;
+		S8 hour;			// Hora
+		S8 minute;
+		S8 second;
 		
-		int day;			// Fecha
-		int month;
-		int year;
+		S8 day;				// Fecha
+		S8 month;
+		S16 year;
 
 	
 	private:
 	
 		// Objeto de la libreria RTC
-		DS3231 clock;
-		RTCDateTime dt;
+		RTClib clock;
+		// Formato de fecha y hora
+		DateTime dt;
 	
 };
 

@@ -15,6 +15,10 @@
 	https://creativecommons.org/licenses/by-nc/4.0/
 	
 	Sensor DHT
+	
+	*** Se requieren las siguientes librerias ***
+	DHT Sensor Library: https://github.com/adafruit/DHT-sensor-library
+	Adafruit Unified Sensor Lib: https://github.com/adafruit/Adafruit_Sensor
 
 *******************************************************************************/
 
@@ -28,10 +32,17 @@
 /*** Includes ***/
 // Arduino
 #include <Arduino.h>
-// Modulos
-#include "libs/SimpleDHT.h"    	// Sensor Humedad y temperatura DHT11
+// Arduino Libs
+#include <DHT.h>
 // N'gine
+#include "ngn_defines.h"		// Definiciones propietarias
 #include "ngn_settings.h"		// Parametros de la configuracion
+
+
+
+/*** Constantes y estaticas ***/
+// Objeto estatico de la clase
+static DHT dht(DHT_PIN, DHT_TYPE);
 
 
 
@@ -47,22 +58,16 @@ class NGN_Dht {
 		~NGN_Dht();
 		
 		// Propiedades
-		int temperature;		// Temperatura
-		int humidity;			// Humedad
+		S8 temperature;				// Temperatura
+		S8 humidity;				// Humedad
 		
 		// Metodos
-		void Start(unsigned int pin);	// Inicia el sensor
-		bool Read();					// Lee la informacion del sensor
-		bool sensor_status;				// Estado del sensor
+		void Start();				// Inicia el sensor
+		bool Read();				// Lee la informacion del sensor
+		bool sensor_status;			// Estado del sensor
 
 	
 	private:
-
-		// Objeto de la libreria del sensor
-		SimpleDHT11 dht;
-		
-		// Pin donde esta conectado el sensor
-		unsigned int pin_id;
 		
 		// Propiedades
 		bool _update;

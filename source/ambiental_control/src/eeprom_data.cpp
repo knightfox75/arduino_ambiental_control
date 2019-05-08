@@ -45,7 +45,7 @@ Eeprom_d EepromData::Load() {
 	Eeprom_d data = Read();
 	
 	// Calcula el checksum
-	unsigned int checksum = CheckSum(data);
+	U32 checksum = CheckSum(data);
 	
 	// Si el checksum difiere
 	if (checksum != data.checksum) {
@@ -106,7 +106,7 @@ Eeprom_d EepromData::DefaultValues() {
 
 
 /*** Genera el CheckSum ***/
-unsigned long int EepromData::CheckSum(Eeprom_d data) {
+U32 EepromData::CheckSum(Eeprom_d data) {
 	
 	return (
 		data.min_temp
@@ -147,7 +147,7 @@ unsigned long int EepromData::CheckSum(Eeprom_d data) {
 /*** Vacia la EEPROM ***/
 void EepromData::EraseEeprom() {
 	
-	for (unsigned int i = 0; i < EEPROM.length(); i ++) EEPROM.write(i, 0);
+	for (U16 i = 0; i < EEPROM.length(); i ++) EEPROM.write(i, 0);
 	
 }
 
@@ -157,7 +157,7 @@ void EepromData::EraseEeprom() {
 Eeprom_d EepromData::Read() {
 	
 	Eeprom_d data;
-	unsigned int addr = 0;
+	U16 addr = 0;
 	
 	EEPROM.get(addr, data);
 	
@@ -169,7 +169,7 @@ Eeprom_d EepromData::Read() {
 /*** Escribe la EEPROM ***/
 void EepromData::Write(Eeprom_d data) {
 	
-	unsigned int addr = 0;
+	U16 addr = 0;
 	
 	// Calcula el checksun
 	data.checksum = CheckSum(data);
