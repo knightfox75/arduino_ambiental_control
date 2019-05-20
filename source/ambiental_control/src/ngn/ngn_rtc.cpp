@@ -48,12 +48,13 @@ void NGN_Rtc::Start() {
 	year = 0;
 	month = 0;
 	day = 0;
+	day_of_week = 0;
 	
 	// Inicia el interfaz I2C 
 	Wire.begin();
 	
-	// Fecha y horas iniciales con el tiempo de compilacion
-	//clock.setDateTime(__DATE__, __TIME__);
+	// Reloj en modo 24H
+	ds3231.setClockMode(false);
 	
 	// Actualiza los valores
 	Read();
@@ -72,8 +73,34 @@ void NGN_Rtc::Read() {
 	second = (S8)dt.second();
 	minute = (S8)dt.minute();
 	hour = (S8)dt.hour();
+	day_of_week = (S8)ds3231.getDoW();
 	day = (S8)dt.day();
 	month = (S8)dt.month();
 	year = (S16)dt.year();
+	
+}
+
+
+
+/*** Guarda los valores actuales en el modulo RTC ***/
+void NGN_Rtc::Save() {
+	
+	// Almacena los valores
+	ds3231.setYear(year - 2000);
+	ds3231.setMonth(month);
+	ds3231.setDate(day);
+	ds3231.setDoW(day_of_week);
+	ds3231.setHour(hour);
+	ds3231.setMinute(minute);
+	ds3231.setSecond(second);
+	
+}
+
+
+
+/*** Apaga la alarma ***/
+void NGN_Rtc::AlarmOff(U8 alarm) {
+	
+	ds3231.turnOffAlarm(alarm);
 	
 }

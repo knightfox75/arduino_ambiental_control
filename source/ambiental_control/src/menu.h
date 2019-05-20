@@ -86,9 +86,12 @@ class Menu {
 		
 		// Cambia el valor de un parametro
 		S16 SetValue(S16 &value, S16 min_val, S16 max_val, U8 unit, U8 width);
+		static const U8 UNIT_NONE = 255;
 		static const U8 UNIT_GRADES = 1;
 		static const U8 UNIT_PERCENT = 2;
 		static const U8 UNIT_SECONDS = 3;
+		static const U8 UNIT_MINUTES = 4;
+		static const U8 UNIT_HOURS = 5;
 		
 		// Maquina de estados
 		S16 st, next_st;								// Control del menu
@@ -115,6 +118,20 @@ class Menu {
 		static const S16 HUMIDITY_ST_ONTIME = 205;
 		static const S16 HUMIDITY_ST_OFFTIME = 206;
 		
+		// Opciones de el menu "Luz diurna"
+		static const S16 SUNLIGHT_ST_RISE_H = 301;
+		static const S16 SUNLIGHT_ST_RISE_M = 302;
+		static const S16 SUNLIGHT_ST_SET_H = 303;
+		static const S16 SUNLIGHT_ST_SET_M = 304;
+		
+		// Opciones de el menu "Fecha y hora"
+		static const S16 DATETIME_ST_SECOND = 401;
+		static const S16 DATETIME_ST_MINUTE = 402;
+		static const S16 DATETIME_ST_HOUR = 403;
+		static const S16 DATETIME_ST_DAY = 404;
+		static const S16 DATETIME_ST_MONTH = 405;
+		static const S16 DATETIME_ST_YEAR = 406;
+
 		// Parametros comunes a todos los menus
 		static const S16 MENU_OP_EXIT = 0x7FFF;
 		const U16 AUTO_KEY_DELAY = 20;				// 20 ticks, 1s
@@ -173,6 +190,37 @@ class Menu {
 		static const S16 HUMIDITY_MENU_OP_ONTIME = 4;
 		static const S16 HUMIDITY_MENU_OP_OFFTIME = 5;
 		
+		// Menu de configuracion de la luz diurna
+		S16 sunlight_menu_op, sunlight_menu_op_last;		// Control de opciones
+		static const S16 SUNLIGHT_MENU_OPTIONS = 4;
+		const String sunlight_menu_text[SUNLIGHT_MENU_OPTIONS] = {
+			"Sunrise",
+			"Sunrise",
+			"Sunset",
+			"Sunset"
+		};
+		static const S16 SUNLIGHT_MENU_OP_RISE_H = 0;
+		static const S16 SUNLIGHT_MENU_OP_RISE_M = 1;
+		static const S16 SUNLIGHT_MENU_OP_SET_H = 2;
+		static const S16 SUNLIGHT_MENU_OP_SET_M = 3;
+		
+		// Menu de configuracion de la fecha y hora
+		S16 datetime_menu_op, datetime_menu_op_last;		// Control de opciones
+		static const S16 DATETIME_MENU_OPTIONS = 6;
+		const String datetime_menu_text[DATETIME_MENU_OPTIONS] = {
+			"Second",
+			"Minute",
+			"Hour",
+			"Day",
+			"Month",
+			"Year"
+		};
+		static const S16 DATETIME_MENU_OP_SECOND = 0;
+		static const S16 DATETIME_MENU_OP_MINUTE = 1;
+		static const S16 DATETIME_MENU_OP_HOUR = 2;
+		static const S16 DATETIME_MENU_OP_DAY = 3;
+		static const S16 DATETIME_MENU_OP_MONTH = 4;
+		static const S16 DATETIME_MENU_OP_YEAR = 5;
 		
 		// Convierte Tics a Segundos y viceversa
 		const U16 BASE = (1000 / CORE_FREQ_DIVIDER);
@@ -180,6 +228,18 @@ class Menu {
 		U16 Ticks2Seconds(U32 ticks);
 		U32 Seconds2Ticks(U16 seconds);
 		
+		// Marca de tiempo
+		struct {
+			S8 second;
+			S8 minute;
+			S8 hour;
+			S8 day;
+			S8 month;
+			S16 year;
+		} time_snap;
+		
+		void ReadDateTime();
+		void SaveDateTime();
 					
 };
 

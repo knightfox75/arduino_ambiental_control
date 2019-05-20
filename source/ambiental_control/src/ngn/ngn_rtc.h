@@ -52,8 +52,11 @@ class NGN_Rtc {
 		~NGN_Rtc();
 		
 		// Metodos
-		void Start();		// Inicia el sensor
-		void Read();		// Lee la fecha y hora actuales
+		void Start();					// Inicia el sensor
+		void Read();					// Lee la fecha y hora actuales
+		void Save();					// Guarda en el reloj los valores actuales
+		void AlarmOff(U8 alarm);		// Apaga la alarma
+		
 		
 		// Propiedades
 		S8 hour;			// Hora
@@ -61,12 +64,15 @@ class NGN_Rtc {
 		S8 second;
 		
 		S8 day;				// Fecha
+		S8 day_of_week;
 		S8 month;
 		S16 year;
 
 	
 	private:
 	
+		// Objeto de la libreria DS3231
+		DS3231 ds3231;
 		// Objeto de la libreria RTC
 		RTClib clock;
 		// Formato de fecha y hora

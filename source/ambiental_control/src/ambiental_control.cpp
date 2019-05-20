@@ -53,6 +53,8 @@ void AmbientalControl::Start(Eeprom_d _data) {
 	_minute = 0xFF;
 	_second = 0xFF;
 	dot2 = true;
+	ngn.rtc.AlarmOff(1);
+	ngn.rtc.AlarmOff(2);
 	
 	// Display sensor ambiental
 	ambiental_text_data = false;
@@ -148,6 +150,10 @@ void AmbientalControl::UpdateData(Eeprom_d _data) {
 	
 	_temperature = 0xFF;
 	_humidity = 0xFF;
+	
+	// Control de la luz diurna
+	sunrise_time = (data.sunrise_hour * 60) + data.sunrise_minute;
+	sunset_time = (data.sunset_hour * 60) + data.sunset_minute;
 	
 	// Borra la pantalla
 	ngn.lcd.Cls();
